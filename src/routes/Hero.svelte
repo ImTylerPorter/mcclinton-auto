@@ -1,7 +1,7 @@
 <script>
 	// @ts-nocheck
-
 	import Logo from '../components/Logo.svelte';
+	import Nav from './Nav.svelte';
 </script>
 
 <section id="hero">
@@ -16,6 +16,9 @@
 				<a href="#contact" class="button">Contact Us!</a>
 			</div>
 		</div>
+	</div>
+	<div class="navContainer">
+		<Nav />
 	</div>
 	<div class="dark-bg"></div>
 </section>
@@ -74,7 +77,7 @@
 		right: 0;
 		bottom: 0;
 		width: 100%;
-		background: rgba(0, 0, 0, 0.7);
+		background: rgba(0, 0, 0, 0.55);
 		z-index: 1;
 	}
 </style>
