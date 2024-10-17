@@ -55,6 +55,7 @@ p {
 a {
   color: var(--color-theme-1);
   text-decoration: none;
+  font-family: "Afacad Flux", sans-serif;
 }
 
 

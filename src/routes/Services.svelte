@@ -15,6 +15,8 @@
 	 */
 	let content;
 
+	export let observer;
+
 	onMount(() => {
 		const observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
