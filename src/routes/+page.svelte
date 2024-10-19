@@ -14,6 +14,19 @@
 	let { reviews } = data;
 </script>
 
+<svelte:head>
+	<title>McClinton Auto Collision - Albany, Oregon</title>
+	<meta
+		name="description"
+		content="McClinton Auto Collision is your late model, collision repair specialist. We repair all makes and models for all insurance companies and those paying out of pocket!"
+	/>
+	<meta property="og:title" content="McClinton Auto Collision - Albany, Oregon" />
+	<meta
+		property="og:description"
+		content="McClinton Auto Collision is your late model, collision repair specialist. We repair all makes and models for all insurance companies and those paying out of pocket!"
+	/>
+</svelte:head>
+
 <Hero />
 <Services />
 <About />

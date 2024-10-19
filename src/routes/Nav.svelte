@@ -12,27 +12,29 @@
 
 <nav>
 	<!-- Menu Icon for mobile -->
-	<div class="menu-icon" on:click={handleNavOpen}><Hamburger --color="white" /></div>
+	<div class="menu-icon" on:click={handleNavOpen}>
+		<Hamburger --color="white" open={isNavOpen} />
+	</div>
 
 	<!-- Dropdown menu with slide transition for mobile -->
 	{#if isNavOpen}
 		<div class="dropdown-menu {isNavOpen && 'open'}" transition:slide>
-			<a href="">Services</a>
-			<a href="">About Us</a>
-			<a href="">Testimonials</a>
-			<a href="">Gallery</a>
-			<a href="">Contact Us</a>
+			<a on:click={handleNavOpen} href="#services">Services</a>
+			<a on:click={handleNavOpen} href="#about">About Us</a>
+			<a on:click={handleNavOpen} href="#testimonials">Testimonials</a>
+			<a on:click={handleNavOpen} href="#gallery">Gallery</a>
+			<a on:click={handleNavOpen} href="#contact">Contact Us</a>
 			<a class="phone" href="tel:5419679528"><Phone /><span>541•967•9528</span></a>
 		</div>
 	{/if}
 
 	<!-- Always show the menu on desktop -->
 	<div class="desktop-menu">
-		<a href="">Services</a>
-		<a href="">About Us</a>
-		<a href="">Testimonials</a>
-		<a href="">Gallery</a>
-		<a href="">Contact Us</a>
+		<a href="#services">Services</a>
+		<a href="#about">About Us</a>
+		<a href="#testimonials">Testimonials</a>
+		<a href="#gallery">Gallery</a>
+		<a href="#contact">Contact Us</a>
 		<a class="phone" href="tel:5419679528"><Phone /><span>541•967•9528</span></a>
 	</div>
 </nav>
