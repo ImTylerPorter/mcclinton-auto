@@ -25,6 +25,7 @@
 		property="og:description"
 		content="McClinton Auto Collision is your late model, collision repair specialist. We repair all makes and models for all insurance companies and those paying out of pocket!"
 	/>
+	<meta property="og:image" content="/images/preview.jpg" />
 </svelte:head>
 
 <Hero />
