@@ -93,6 +93,7 @@
 	#contact {
 		padding: 100px 0;
 		position: relative;
+		overflow: hidden;
 	}
 	.container {
 		width: 1000px;

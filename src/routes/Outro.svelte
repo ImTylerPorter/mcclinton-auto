@@ -1,13 +1,40 @@
 <script>
+	import { onMount } from 'svelte';
+	let inView = false;
+	/**
+	 * @type {Element}
+	 */
+	let content;
 	const currentYear = new Date().getFullYear();
 	const yearStarted = 1997;
 	const yearsInBusiness = currentYear - yearStarted;
 	const earliestWorkedOn = currentYear - 15;
+
+	export let observer;
+
+	onMount(() => {
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					inView = true; // Trigger fly animation when in view
+				}
+			});
+		});
+
+		if (content) {
+			observer.observe(content);
+		}
+
+		// Clean up the observer when component is destroyed
+		return () => {
+			if (content) observer.unobserve(content);
+		};
+	});
 </script>
 
 <section id="outro">
 	<div class="container">
-		<div class="content">
+		<div class="content" bind:this={content} class:visible={inView}>
 			<h3>{yearsInBusiness} Years in Business</h3>
 			<p>
 				We are your local, family owned collsion repair facility. We offer complete, high-quality
@@ -27,7 +54,7 @@
 		background-repeat: no-repeat;
 		background-image: url('/images/outro.jpg');
 		background-position: center right;
-		background-size: 61% auto;
+		background-size: 60% auto;
 	}
 	.container {
 		width: 1000px;
@@ -49,6 +76,13 @@
 	}
 	.content {
 		width: 35em;
+		opacity: 0;
+		transform: translateX(-100%);
+		transition: all 800ms ease;
+	}
+	.content.visible {
+		opacity: 1;
+		transform: translateX(0);
 	}
 	.button {
 		margin-top: 25px;
