@@ -25,7 +25,7 @@
 		background: var(--black);
 		padding: 100px 0;
 		background-repeat: no-repeat;
-		background-image: url('./images/outro.jpg');
+		background-image: url('/images/outro.jpg');
 		background-position: center right;
 		background-size: 61% auto;
 	}

@@ -57,7 +57,7 @@
 		background-color: var(--tan);
 		padding: 100px 0;
 		background-repeat: no-repeat;
-		background-image: url('images/reviews-bg.jpg');
+		background-image: url('/images/reviews-bg.jpg');
 		background-position: center right;
 		background-size: auto 100%;
 	}
