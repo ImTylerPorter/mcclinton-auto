@@ -2,7 +2,7 @@ import Mailgun from 'mailgun.js';
 import formData from 'form-data';  // Make sure to import form-data
 
 import { VITE_MAILGUN_API_KEY, VITE_EMAIL_TO } from '$env/static/private'; // Import server-side env variables
-import { error } from '@sveltejs/kit';
+// import { error } from '@sveltejs/kit';
 
 // Initialize Mailgun
 const mailgun = new Mailgun(formData);
