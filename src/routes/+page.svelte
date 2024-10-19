@@ -2,6 +2,7 @@
 	// @ts-nocheck
 
 	import About from './About.svelte';
+	import Gallery from './Gallery.svelte';
 	import Hero from './Hero.svelte';
 	import Reviews from './Reviews.svelte';
 	import Services from './Services.svelte';
@@ -14,3 +15,4 @@
 <Services />
 <About />
 <Reviews {reviews} />
+<Gallery />
