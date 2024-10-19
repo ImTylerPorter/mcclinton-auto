@@ -74,4 +74,15 @@
 		width: 30%;
 		height: 100vh;
 	}
+
+	@media (max-width: 869px) {
+		.centered-green-bg {
+			width: 60%;
+		}
+	}
+	@media (max-width: 480px) {
+		.centered-green-bg {
+			width: 80%;
+		}
+	}
 </style>

@@ -165,4 +165,18 @@
 		display: block;
 		padding: 14px 48px;
 	}
+
+	@media (max-width: 869px) {
+		.centered-green-bg {
+			width: 60%;
+		}
+		.fieldGroup {
+			flex-direction: column;
+		}
+	}
+	@media (max-width: 480px) {
+		.centered-green-bg {
+			width: 80%;
+		}
+	}
 </style>

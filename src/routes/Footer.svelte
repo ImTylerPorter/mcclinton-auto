@@ -69,7 +69,7 @@
 		transform: translateX(-50%);
 		width: 30%;
 		height: 104.5%;
-		padding: 100px 0 0;
+		padding: 100px 10px 0;
 	}
 	.logo {
 		width: 75%;
@@ -114,5 +114,25 @@
 	}
 	.social a:hover path {
 		fill: var(--tan);
+	}
+
+	@media (max-width: 869px) {
+		.container-green {
+			width: 60% !important;
+		}
+	}
+
+	@media (max-width: 580px) {
+		footer {
+			min-height: 580px;
+		}
+		.container-green {
+			height: 102.6% !important;
+		}
+	}
+	@media (max-width: 480px) {
+		.container-green {
+			width: 80% !important;
+		}
 	}
 </style>
