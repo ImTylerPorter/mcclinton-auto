@@ -3,6 +3,7 @@
 
 	import About from './About.svelte';
 	import Contact from './Contact.svelte';
+	import Footer from './Footer.svelte';
 	import Gallery from './Gallery.svelte';
 	import Hero from './Hero.svelte';
 	import Outro from './Outro.svelte';
@@ -20,3 +21,4 @@
 <Gallery />
 <Outro />
 <Contact />
+<Footer />
