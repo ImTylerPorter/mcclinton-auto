@@ -70,7 +70,7 @@
 
 <style>
 	#about {
-		background: #1d1d1d;
+		background: var(--black);
 		padding: 100px 0;
 		position: relative;
 	}

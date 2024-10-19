@@ -41,6 +41,7 @@
 	#gallery {
 		padding: 75px 0;
 		position: relative;
+		overflow: hidden;
 	}
 	.container {
 		position: relative;
