@@ -78,6 +78,7 @@
 <style>
 	#services {
 		padding: 50px 0;
+		overflow: hidden;
 	}
 	.container {
 		width: 1100px;
@@ -92,6 +93,7 @@
 		position: relative;
 		padding: 100px 0;
 	}
+
 	.content {
 		transform: translateX(-60%);
 		opacity: 0;
@@ -116,6 +118,7 @@
 			opacity 0.6s ease-out,
 			transform 0.8s ease-out;
 	}
+
 	.greenBox.visible {
 		opacity: 1;
 		transform: translate(0);
@@ -163,5 +166,36 @@
 	.image img {
 		width: 100%;
 		display: block;
+	}
+
+	@media (max-width: 869px) {
+		.introGrid {
+			grid-template-columns: 1fr;
+			gap: 75px;
+		}
+
+		.greenBox {
+			top: 310px;
+		}
+	}
+
+	@media (max-width: 580px) {
+		.greenBox {
+			width: 300px;
+			top: 330px;
+		}
+	}
+
+	@media (max-width: 440px) {
+		.greenBox {
+			width: 230px;
+			top: 360px;
+		}
+	}
+
+	@media (max-width: 400px) {
+		.greenBox {
+			top: 430px;
+		}
 	}
 </style>
