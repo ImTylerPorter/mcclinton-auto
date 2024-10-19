@@ -43,7 +43,7 @@ export const actions = {
     try {
       // Prepare email data
       const mailgunData = {
-        from: `Contact Form <${email}>`,
+        from: `${name} <${email}>`,
         to: VITE_EMAIL_TO,  // Use the server-side env variable for the recipient
         subject: 'New Contact Form Submission',
         text: `From: ${name} (${email})\nPhone: ${phone}\n\n${message}`
