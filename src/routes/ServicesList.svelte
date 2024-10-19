@@ -162,4 +162,10 @@
 		bottom: 0;
 		background: rgba(0, 0, 0, 0.5);
 	}
+
+	@media (max-width: 869px) {
+		.services {
+			grid-template-columns: 1fr;
+		}
+	}
 </style>

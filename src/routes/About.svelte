@@ -73,6 +73,7 @@
 		background: var(--black);
 		padding: 100px 0;
 		position: relative;
+		overflow-x: hidden;
 	}
 
 	.container {
@@ -94,6 +95,12 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 100px;
+	}
+
+	@media (max-width: 869px) {
+		.grid {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	.image {
