@@ -124,5 +124,11 @@
 		.image {
 			display: none;
 		}
+		.reviewsWrap > div:first-child {
+			padding: 50px;
+		}
+		h3 {
+			text-shadow: 2px 2px 10px black;
+		}
 	}
 </style>

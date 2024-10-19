@@ -76,6 +76,7 @@
 	}
 	.content {
 		width: 35em;
+		max-width: 100%;
 		opacity: 0;
 		transform: translateX(-100%);
 		transition: all 800ms ease;
@@ -87,5 +88,10 @@
 	.button {
 		margin-top: 25px;
 		display: inline-block;
+	}
+	@media (max-width: 869px) {
+		section#outro {
+			background-size: cover;
+		}
 	}
 </style>
