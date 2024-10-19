@@ -27,7 +27,7 @@
 		background-repeat: no-repeat;
 		background-image: url('./images/outro.jpg');
 		background-position: center right;
-		background-size: 60% auto;
+		background-size: 61% auto;
 	}
 	.container {
 		width: 1000px;
