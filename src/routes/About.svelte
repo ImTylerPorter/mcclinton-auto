@@ -59,8 +59,8 @@
 				<div class="contact">
 					<h5>Contact Us</h5>
 					<p>3960 E Commercial Way SE Albany, OR 97322</p>
-					<a>541•967•9528</a>
-					<p>info@mcclintonauto.com</p>
+					<a href="tel:5419679528">541•967•9528</a>
+					<p href="mailto:info@mcclintonauto.com">info@mcclintonauto.com</p>
 				</div>
 			</div>
 		</div>
