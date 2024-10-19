@@ -43,7 +43,7 @@
 	<div class="container">
 		<div class="grid">
 			<div class="image" bind:this={imageElement} class:visible={inView}>
-				<img src="./images/us.jpg" alt="The McClinton Auto Crew" />
+				<img src="/images/us.jpg" alt="The McClinton Auto Crew" />
 			</div>
 			<div class="content" bind:this={content} class:visible={inView}>
 				<p class="pre-title">ABOUT</p>
