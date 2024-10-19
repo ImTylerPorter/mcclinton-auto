@@ -116,4 +116,13 @@
 	.swiper-initialized {
 		display: none;
 	}
+
+	@media (max-width: 869px) {
+		.reviewsWrap {
+			grid-template-columns: 1fr;
+		}
+		.image {
+			display: none;
+		}
+	}
 </style>
