@@ -80,4 +80,10 @@
 		background: rgba(0, 0, 0, 0.55);
 		z-index: 1;
 	}
+
+	@media (max-width: 600px) {
+		.contentContainer {
+			margin: 100px auto;
+		}
+	}
 </style>

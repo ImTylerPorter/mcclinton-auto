@@ -161,4 +161,25 @@
 		text-transform: uppercase;
 		color: white;
 	}
+
+	@media (max-width: 869px) {
+		.grid {
+			grid-template-columns: 1fr;
+		}
+
+		.image {
+			order: 2;
+		}
+
+		.green-bg {
+			width: 100%;
+			top: 66%;
+		}
+	}
+
+	@media (max-width: 500px) {
+		.green-bg {
+			top: 75%;
+		}
+	}
 </style>
