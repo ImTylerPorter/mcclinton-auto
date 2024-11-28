@@ -1,16 +1,16 @@
 <script>
 	import { onMount } from 'svelte';
-	let inView = false;
+	let inView = $state(false);
 	/**
 	 * @type {Element}
 	 */
-	let content;
+	let content = $state();
 	const currentYear = new Date().getFullYear();
 	const yearStarted = 1997;
 	const yearsInBusiness = currentYear - yearStarted;
 	const earliestWorkedOn = currentYear - 15;
 
-	export let observer;
+	let { observer } = $props();
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entries) => {

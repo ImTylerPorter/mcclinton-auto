@@ -10,7 +10,7 @@
 	import Reviews from './Reviews.svelte';
 	import Services from './Services.svelte';
 
-	export let data;
+	let { data } = $props();
 	let { reviews } = data;
 </script>
 

@@ -1,14 +1,14 @@
 <script>
 	import { page } from '$app/stores';
-	let name = '';
-	let email = '';
-	let phone = '';
-	let message = '';
-	let messageSent = false;
+	let name = $state('');
+	let email = $state('');
+	let phone = $state('');
+	let message = $state('');
+	let messageSent = $state(false);
 	/**
 	 * @type {string | null}
 	 */
-	let formError = null;
+	let formError = $state(null);
 
 	const submitForm = async (event) => {
 		event.preventDefault();
@@ -18,7 +18,6 @@
 		formData.append('phone', phone);
 		formData.append('message', message);
 
-		// Assuming your server route is the same as where this form is located
 		const response = await fetch($page.url.pathname, {
 			method: 'POST',
 			body: formData
@@ -37,7 +36,6 @@
 		const data = await response.json();
 		if (data.status === 200) {
 			formError = null;
-			// Show success message
 			messageSent = true;
 		} else {
 			formError = 'An error occurred';
@@ -51,7 +49,7 @@
 			{#if !messageSent}
 				<h3>Contact Us</h3>
 				<p>Send us a messsage. We will get back to you as soon as possible!</p>
-				<form on:submit={submitForm}>
+				<form onsubmit={submitForm}>
 					{#if formError}
 						<p style="color:red;">{formError}</p>
 					{/if}

@@ -1,17 +1,17 @@
 <script>
 	import { onMount } from 'svelte';
-	let inView = false;
+	let inView = $state(false);
 	/**
 	 * @type {Element}
 	 */
-	let imageElement;
+	let imageElement = $state();
 
 	/**
 	 * @type {Element}
 	 */
-	let content;
+	let content = $state();
 
-	export let observer;
+	let { observer } = $props();
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entries) => {
