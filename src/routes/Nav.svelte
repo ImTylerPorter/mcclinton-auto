@@ -12,8 +12,8 @@
 
 <nav>
 	<!-- Menu Icon for mobile -->
-	<div class="menu-icon" onclick={handleNavOpen}>
-		<Hamburger --color="white" open={isNavOpen} />
+	<div class="menu-icon">
+		<Hamburger --color="white" open={isNavOpen} onclick={() => handleNavOpen()} />
 	</div>
 
 	<!-- Dropdown menu with slide transition for mobile -->
