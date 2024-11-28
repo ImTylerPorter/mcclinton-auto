@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-	let inView = false;
-	let services;
+	let inView = $state(false);
+	let services = $state();
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entries) => {

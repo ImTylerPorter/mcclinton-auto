@@ -3,7 +3,7 @@
 	import { slide } from 'svelte/transition';
 	import { Hamburger } from 'svelte-hamburgers';
 
-	let isNavOpen = false;
+	let isNavOpen = $state(false);
 
 	function handleNavOpen() {
 		isNavOpen = !isNavOpen;
@@ -12,18 +12,18 @@
 
 <nav>
 	<!-- Menu Icon for mobile -->
-	<div class="menu-icon" on:click={handleNavOpen}>
+	<div class="menu-icon" onclick={handleNavOpen}>
 		<Hamburger --color="white" open={isNavOpen} />
 	</div>
 
 	<!-- Dropdown menu with slide transition for mobile -->
 	{#if isNavOpen}
 		<div class="dropdown-menu {isNavOpen && 'open'}" transition:slide>
-			<a on:click={handleNavOpen} href="#services">Services</a>
-			<a on:click={handleNavOpen} href="#about">About Us</a>
-			<a on:click={handleNavOpen} href="#testimonials">Testimonials</a>
-			<a on:click={handleNavOpen} href="#gallery">Gallery</a>
-			<a on:click={handleNavOpen} href="#contact">Contact Us</a>
+			<a onclick={handleNavOpen} href="#services">Services</a>
+			<a onclick={handleNavOpen} href="#about">About Us</a>
+			<a onclick={handleNavOpen} href="#testimonials">Testimonials</a>
+			<a onclick={handleNavOpen} href="#gallery">Gallery</a>
+			<a onclick={handleNavOpen} href="#contact">Contact Us</a>
 			<a class="phone" href="tel:5419679528"><Phone /><span>541•967•9528</span></a>
 		</div>
 	{/if}

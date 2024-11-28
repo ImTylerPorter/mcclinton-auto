@@ -2,11 +2,15 @@
 	import { register } from 'swiper/element/bundle';
 	register();
 
-	export let error;
+	
 	/**
-	 * @type {string | any[]}
+	 * @typedef {Object} Props
+	 * @property {any} error
+	 * @property {string | any[]} reviews
 	 */
-	export let reviews;
+
+	/** @type {Props} */
+	let { error, reviews } = $props();
 
 	const spaceBetween = 0;
 	const onProgress = (e) => {

@@ -1,27 +1,30 @@
 <script>
 	import { register } from 'swiper/element/bundle';
 	register();
-	const spaceBetween = 0;
+
+	const swiperOptions = {
+		effect: 'coverflow',
+		loop: true,
+		grabCursor: true,
+		centeredSlides: true,
+		coverflowEffect: {
+			rotate: 0,
+			stretch: 0,
+			depth: 200,
+			modifier: 3,
+			slideShadows: true
+		},
+		spaceBetween: 0,
+		slidesPerView: 'auto',
+		initialSlide: 2
+	};
 </script>
 
 <section id="gallery">
 	<div class="container">
 		<h3>Our Gallery</h3>
 		<div class="gallery">
-			<swiper-container
-				effect="coverflow"
-				loop={true}
-				grab-cursor="true"
-				centered-slides="true"
-				coverflow-effect-rotate={0}
-				coverflow-effect-stretch={0}
-				coverflow-effect-depth={200}
-				coverflow-effect-modifier={3}
-				coverflow-effect-slide-shadows={true}
-				space-between={spaceBetween}
-				slides-per-view="auto"
-				initial-slide={2}
-			>
+			<swiper-container {...swiperOptions}>
 				<swiper-slide>
 					<img src="images/one.jpg" alt="Wrecked Car" />
 				</swiper-slide>

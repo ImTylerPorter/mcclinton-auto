@@ -1,21 +1,21 @@
 <script>
 	import { onMount } from 'svelte';
 	import ServicesList from './ServicesList.svelte';
-	let inView = false;
+	let inView = $state(false);
 	/**
 	 * @type {Element}
 	 */
-	let imageElement;
+	let imageElement = $state();
 	/**
 	 * @type {Element}
 	 */
-	let greenBox;
+	let greenBox = $state();
 	/**
 	 * @type {Element}
 	 */
-	let content;
+	let content = $state();
 
-	export let observer;
+	let { observer } = $props();
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entries) => {
