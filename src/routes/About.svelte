@@ -151,13 +151,13 @@
 		margin-bottom: 10px;
 	}
 	.contact p {
-		font-size: 1.1rem;
+		font-size: 1.2rem;
 		margin: 0;
 		line-height: 1.1;
 		text-transform: uppercase;
 	}
 	.contact a {
-		font-size: 1.1rem;
+		font-size: 1.2rem;
 		text-transform: uppercase;
 		color: white;
 		display: block;
