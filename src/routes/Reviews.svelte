@@ -2,7 +2,6 @@
 	import { register } from 'swiper/element/bundle';
 	register();
 
-	
 	/**
 	 * @typedef {Object} Props
 	 * @property {any} error
@@ -105,12 +104,9 @@
 		background-size: auto 100%;
 	}
 
-	.swiper-container {
+	swiper-container {
 		overflow: hidden;
 		width: 100%;
-	}
-	.swiper-slide {
-		/* display: block; */
 	}
 
 	.reviewsWrap > div:first-child {
@@ -167,9 +163,6 @@
 		aspect-ratio: 1/1;
 		object-fit: cover;
 		object-position: center;
-	}
-	.swiper-initialized {
-		display: none;
 	}
 
 	.button {
