@@ -1,40 +1,41 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
+
+	// State variables
 	let inView = $state(false);
-	/**
-	 * @type {Element}
-	 */
-	let imageElement = $state();
 
-	/**
-	 * @type {Element}
-	 */
-	let content = $state();
+	// References to DOM elements
+	let imageElement: HTMLElement | null = $state(null);
+	let content: HTMLElement | null = $state(null);
 
-	let { observer } = $props();
+	// Props
+	let { observer }: { observer?: IntersectionObserver } = $props();
 
+	// Lifecycle hook to set up the observer
 	onMount(() => {
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					inView = true; // Trigger fly animation when in view
-				}
+		// Use the provided observer or create a new one
+		const localObserver =
+			observer ||
+			new IntersectionObserver((entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						inView = true; // Trigger fly animation when in view
+					}
+				});
 			});
-		});
 
-		// Observe the element when it is available
+		// Observe the elements
 		if (imageElement) {
-			observer.observe(imageElement);
+			localObserver.observe(imageElement);
 		}
-
 		if (content) {
-			observer.observe(content);
+			localObserver.observe(content);
 		}
 
-		// Clean up the observer when component is destroyed
+		// Cleanup on component destroy
 		return () => {
-			if (imageElement) observer.unobserve(imageElement);
-			if (content) observer.unobserve(content);
+			if (imageElement) localObserver.unobserve(imageElement);
+			if (content) localObserver.unobserve(content);
 		};
 	});
 </script>

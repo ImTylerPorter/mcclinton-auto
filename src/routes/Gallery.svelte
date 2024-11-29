@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { register } from 'swiper/element/bundle';
 	register();
 

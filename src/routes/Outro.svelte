@@ -1,33 +1,42 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
+
+	// State variable to track visibility
 	let inView = $state(false);
-	/**
-	 * @type {Element}
-	 */
-	let content = $state();
+
+	// Reference to the DOM element
+	let content: HTMLElement | null = $state(null);
+
+	// Dynamic year calculations
 	const currentYear = new Date().getFullYear();
 	const yearStarted = 1997;
 	const yearsInBusiness = currentYear - yearStarted;
 	const earliestWorkedOn = currentYear - 15;
 
-	let { observer } = $props();
+	// Props for optional observer
+	let { observer }: { observer?: IntersectionObserver } = $props();
 
+	// Lifecycle hook
 	onMount(() => {
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					inView = true; // Trigger fly animation when in view
-				}
+		// Use provided observer or create a new one
+		const localObserver =
+			observer ||
+			new IntersectionObserver((entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						inView = true; // Trigger animation when in view
+					}
+				});
 			});
-		});
 
+		// Observe the content element
 		if (content) {
-			observer.observe(content);
+			localObserver.observe(content);
 		}
 
-		// Clean up the observer when component is destroyed
+		// Cleanup on component destroy
 		return () => {
-			if (content) observer.unobserve(content);
+			if (content) localObserver.unobserve(content);
 		};
 	});
 </script>

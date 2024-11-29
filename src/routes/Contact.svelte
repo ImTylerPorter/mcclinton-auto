@@ -1,44 +1,48 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
+
+	// States for form data
 	let name = $state('');
 	let email = $state('');
 	let phone = $state('');
 	let message = $state('');
 	let messageSent = $state(false);
-	/**
-	 * @type {string | null}
-	 */
-	let formError = $state(null);
 
-	const submitForm = async (event) => {
+	// Form error with an initial null value
+	let formError: string | null = null;
+
+	// Submit function with proper TypeScript types
+	const submitForm = async (event: Event): Promise<void> => {
 		event.preventDefault();
+
+		// Create FormData
 		const formData = new FormData();
 		formData.append('name', name);
 		formData.append('email', email);
 		formData.append('phone', phone);
 		formData.append('message', message);
 
-		const response = await fetch($page.url.pathname, {
-			method: 'POST',
-			body: formData
-		});
+		try {
+			const response = await fetch($page.url.pathname, {
+				method: 'POST',
+				body: formData
+			});
 
-		if (!response.ok) {
-			const errorData = await response.json();
-			if (errorData && errorData.error && errorData.error.message) {
-				formError = errorData.error.message;
-			} else {
-				formError = 'An unexpected error occurred';
+			if (!response.ok) {
+				const errorData = await response.json();
+				formError = errorData?.error?.message || 'An unexpected error occurred';
+				return;
 			}
-			return;
-		}
 
-		const data = await response.json();
-		if (data.status === 200) {
-			formError = null;
-			messageSent = true;
-		} else {
-			formError = 'An error occurred';
+			const data = await response.json();
+			if (data.status === 200) {
+				formError = null;
+				messageSent = true;
+			} else {
+				formError = 'An error occurred';
+			}
+		} catch (error) {
+			formError = 'An unexpected error occurred';
 		}
 	};
 </script>

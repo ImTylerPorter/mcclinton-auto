@@ -1,6 +1,4 @@
-<script>
-	// @ts-nocheck
-
+<script lang="ts">
 	import About from './About.svelte';
 	import Contact from './Contact.svelte';
 	import Footer from './Footer.svelte';
@@ -9,8 +7,9 @@
 	import Outro from './Outro.svelte';
 	import Reviews from './Reviews.svelte';
 	import Services from './Services.svelte';
+	import type { PageData } from './$types';
 
-	let { data } = $props();
+	let { data } = $props<{ data: PageData }>();
 	let { reviews } = data;
 </script>
 

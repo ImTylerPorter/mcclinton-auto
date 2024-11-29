@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	let inView = $state(false);
-	let services = $state();
+	let services: HTMLElement | null = null; // Type-safe DOM element reference
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entries) => {

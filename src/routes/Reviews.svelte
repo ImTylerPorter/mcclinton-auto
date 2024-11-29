@@ -1,22 +1,25 @@
-<script>
+<script lang="ts">
 	import { register } from 'swiper/element/bundle';
 	register();
 
-	/**
-	 * @typedef {Object} Props
-	 * @property {any} error
-	 * @property {string | any[]} reviews
-	 */
+	// Define the props interface
+	interface Props {
+		error?: string | null; // Optional error property
+		reviews: Array<{ comment: string; customerName: string; carMake: string }> | string; // Array of review objects or a string
+	}
 
-	/** @type {Props} */
-	let { error, reviews } = $props();
+	// Props declaration
+	export let error: Props['error'] = null; // Default value for error
+	export let reviews: Props['reviews'];
 
 	const spaceBetween = 0;
-	const onProgress = (e) => {
+
+	const onProgress = (e: CustomEvent<[unknown, number]>) => {
 		const [swiper, progress] = e.detail;
 		console.log(progress);
 	};
-	const onSlideChange = (e) => {
+
+	const onSlideChange = (e: Event) => {
 		console.log('slide changed');
 	};
 </script>

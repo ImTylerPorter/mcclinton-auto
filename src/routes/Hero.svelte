@@ -1,5 +1,4 @@
-<script>
-	// @ts-nocheck
+<script lang="ts">
 	import Logo from '../components/Logo.svelte';
 	import Nav from './Nav.svelte';
 </script>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Phone from '../components/Phone.svelte';
 	import { slide } from 'svelte/transition';
 	import { Hamburger } from 'svelte-hamburgers';

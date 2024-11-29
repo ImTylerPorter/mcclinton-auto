@@ -1,49 +1,40 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import ServicesList from './ServicesList.svelte';
+
 	let inView = $state(false);
-	/**
-	 * @type {Element}
-	 */
 	let imageElement = $state();
-	/**
-	 * @type {Element}
-	 */
 	let greenBox = $state();
-	/**
-	 * @type {Element}
-	 */
 	let content = $state();
 
-	let { observer } = $props();
+	// Mark `observer` as optional
+	let { observer }: { observer?: IntersectionObserver } = $props();
 
 	onMount(() => {
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					inView = true; // Trigger fly animation when in view
-				}
+		const localObserver =
+			observer ||
+			new IntersectionObserver((entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						inView = true; // Trigger fly animation when in view
+					}
+				});
 			});
-		});
 
-		// Observe the image element when it is available
 		if (imageElement) {
-			observer.observe(imageElement);
+			localObserver.observe(imageElement);
 		}
-
 		if (greenBox) {
-			observer.observe(greenBox);
+			localObserver.observe(greenBox);
 		}
-
 		if (content) {
-			observer.observe(content);
+			localObserver.observe(content);
 		}
 
-		// Clean up the observer when component is destroyed
 		return () => {
-			if (imageElement) observer.unobserve(imageElement);
-			if (greenBox) observer.unobserve(greenBox);
-			if (content) observer.unobserve(content);
+			if (imageElement) localObserver.unobserve(imageElement);
+			if (greenBox) localObserver.unobserve(greenBox);
+			if (content) localObserver.unobserve(content);
 		};
 	});
 </script>
