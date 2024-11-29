@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+
 	import Logo from '../../components/Logo.svelte';
 
 	type FormState = {
@@ -63,9 +65,7 @@
 				body: formData
 			});
 			const result = await response.json();
-			formState.error = response.ok
-				? 'Logged in!'
-				: result.error.message || 'Operation failed. Humanity still not advanced enough.';
+			await goto('/');
 		} catch (err) {
 			formState.error = 'An error occurred. Did we break the space-time continuum?';
 		}
