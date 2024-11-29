@@ -82,7 +82,7 @@
 				</form>
 			{:else}
 				<div class="messageSent">
-					<h3>Thank you for your message, {name.split(' ')[0]}!</h3>
+					<h3>Thank you for your message, {name ? name.split(' ')[0] : 'valued customer'}!</h3>
 					<p>We look forward to speaking and will reach out soon!</p>
 				</div>
 			{/if}

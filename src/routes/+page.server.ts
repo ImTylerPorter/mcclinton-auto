@@ -3,6 +3,7 @@ import formData from 'form-data'; // Make sure to import form-data
 import { error } from '@sveltejs/kit';
 
 import { VITE_MAILGUN_API_KEY, VITE_EMAIL_TO } from '$env/static/private'; // Import server-side env variables
+import { getOrCreateUserProfile } from '$lib/auth/index.js';
 
 // Initialize Mailgun
 const mailgun = new Mailgun(formData);
@@ -63,3 +64,12 @@ export const actions = {
     }
   }
 };
+
+
+export const load = async ({ locals }: { locals: any }) => {
+  const userProfile = await getOrCreateUserProfile(locals)
+
+  return {
+    userProfile,
+  }
+}

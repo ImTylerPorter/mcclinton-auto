@@ -1,4 +1,4 @@
-// import 'dotenv/config';
+import 'dotenv/config';
 import { defineConfig } from 'drizzle-kit';
 export default defineConfig({
   out: './supabase/migrations',
@@ -6,7 +6,7 @@ export default defineConfig({
   dialect: 'postgresql',
   dbCredentials: {
     host: 'localhost',
-    port: 54321,
+    port: 64321,
     user: 'postgres',
     password: 'postgres',
     database: 'supabase'
