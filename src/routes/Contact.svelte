@@ -9,7 +9,7 @@
 	let messageSent = $state(false);
 
 	// Form error with an initial null value
-	let formError: string | null = null;
+	let formError = $state<string | null>(null);
 
 	// Submit function with proper TypeScript types
 	const submitForm = async (event: Event): Promise<void> => {

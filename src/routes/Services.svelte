@@ -3,10 +3,10 @@
 	import ServicesList from './ServicesList.svelte';
 
 	let inView = $state(false);
-	let imageElement = $state();
-	let greenBox = $state();
-	let content = $state();
-
+	// Explicitly type as HTMLElement or null
+	let imageElement: HTMLElement | null = null;
+	let greenBox: HTMLElement | null = null;
+	let content: HTMLElement | null = null;
 	// Mark `observer` as optional
 	let { observer }: { observer?: IntersectionObserver } = $props();
 
@@ -56,7 +56,7 @@
 			<div>
 				<!-- Always render the div, fly transition happens when inView becomes true -->
 				<div bind:this={imageElement} class="image" class:visible={inView}>
-					<img src="images/building.jpg" alt="Photo of McClinton Auto Collision Building" />
+					<img src="images/building.jpg" alt="McClinton Auto Collision Building" />
 				</div>
 			</div>
 

@@ -68,11 +68,13 @@
 							<p>Error: {error}</p>
 						{:else if reviews && reviews.length > 0}
 							{#each reviews as review}
-								<swiper-slide>
-									<p>{review.comment}</p>
-									<p class="name">{review.customerName}</p>
-									<p class="make">{review.carMake}</p>
-								</swiper-slide>
+								{#if typeof review !== 'string'}
+									<swiper-slide>
+										<p>{review.comment}</p>
+										<p class="name">{review.customerName}</p>
+										<p class="make">{review.carMake}</p>
+									</swiper-slide>
+								{/if}
 							{/each}
 						{/if}
 					</swiper-container>
