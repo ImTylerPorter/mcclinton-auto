@@ -19,7 +19,6 @@
 
 	onMount(() => {
 		sections = Array.from(document.querySelectorAll('[data-id]')); // Select all sections with data-id
-		//sections is outputing correctly
 		const observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
@@ -28,7 +27,7 @@
 					}
 				});
 			},
-			{ threshold: 0.6 }
+			{ threshold: 0.2 }
 		);
 
 		// Observe each section

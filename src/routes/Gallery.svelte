@@ -1,7 +1,14 @@
 <script lang="ts">
 	import { register } from 'swiper/element/bundle';
-	register();
+	import { onMount } from 'svelte';
+	let init = false;
 
+	onMount(() => {
+		if (!init) {
+			register();
+			init = true;
+		}
+	});
 	const swiperOptions = {
 		effect: 'coverflow',
 		loop: true,
