@@ -13,15 +13,6 @@
 	export let reviews: Props['reviews'];
 
 	const spaceBetween = 0;
-
-	const onProgress = (e: CustomEvent<[unknown, number]>) => {
-		const [swiper, progress] = e.detail;
-		console.log(progress);
-	};
-
-	const onSlideChange = (e: Event) => {
-		console.log('slide changed');
-	};
 </script>
 
 <section id="testimonials">

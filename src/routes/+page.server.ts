@@ -1,6 +1,8 @@
 import Mailgun from 'mailgun.js';
 import formData from 'form-data'; // Make sure to import form-data
 import { error } from '@sveltejs/kit';
+import axios from 'axios';
+import * as cheerio from 'cheerio';
 
 import { VITE_MAILGUN_API_KEY, VITE_EMAIL_TO } from '$env/static/private'; // Import server-side env variables
 import { getOrCreateUserProfile } from '$lib/auth/index.js';
@@ -8,6 +10,18 @@ import { getOrCreateUserProfile } from '$lib/auth/index.js';
 // Initialize Mailgun
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({ username: 'api', key: VITE_MAILGUN_API_KEY });
+
+type Review = {
+  comment: string;
+  customerName: string;
+  carMake: string;
+};
+
+type LoadResponse = {
+  reviews?: Review[];
+  userProfile?: any;
+  error?: string;
+};
 
 export const actions = {
   default: async ({ request }: { request: Request }) => {
@@ -65,11 +79,42 @@ export const actions = {
   }
 };
 
+export async function load({ locals }): Promise<LoadResponse> {
+  try {
+    // Scraping reviews
+    const url =
+      'https://www.carwise.com/auto-body-shops/shopPlugin?rfid=555006&re=1&type=f&theme=&size=m&zip=&demo=f&ap=false';
+    const { data } = await axios.get<string>(url); // Specify the type of response data
 
-export const load = async ({ locals }: { locals: any }) => {
-  const userProfile = await getOrCreateUserProfile(locals)
+    const $ = cheerio.load(data);
+    let reviews: Review[] = []; // Initialize reviews with the defined type
 
-  return {
-    userProfile,
+    $('#reviewList li.reviewListItem').each((i, elem) => {
+      const comment = $(elem).find('.comment').text().trim();
+      const customerName = $(elem).find('.customerName').text().trim();
+      const carMake = $(elem).find('.carMake').text().trim();
+
+      if (comment !== '') {
+        reviews.push({
+          comment,
+          customerName,
+          carMake,
+        });
+      }
+    });
+
+    // Loading user profile
+    const userProfile = await getOrCreateUserProfile(locals);
+
+    // Return both reviews and userProfile
+    return {
+      reviews,
+      userProfile,
+    };
+  } catch (error) {
+    console.error('Error occurred:', error);
+    return {
+      error: 'Failed to load data',
+    };
   }
 }

@@ -8,9 +8,10 @@
 	import Reviews from './Reviews.svelte';
 	import Services from './Services.svelte';
 	import type { PageData } from './$types';
+	import AdminBar from './AdminBar.svelte';
 
 	let { data } = $props<{ data: PageData }>();
-	let { reviews } = data;
+	let { reviews, userProfile } = data;
 </script>
 
 <svelte:head>
@@ -26,6 +27,10 @@
 	/>
 	<meta property="og:image" content="/images/preview.jpg" />
 </svelte:head>
+
+{#if userProfile}
+	<AdminBar {userProfile} />
+{/if}
 
 <Hero />
 <Services />
