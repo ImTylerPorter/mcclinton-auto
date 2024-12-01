@@ -40,7 +40,7 @@
 	});
 </script>
 
-<section id="about">
+<section id="about" data-id="About Us">
 	<div class="container">
 		<div class="grid">
 			<div class="image" bind:this={imageElement} class:visible={inView}>

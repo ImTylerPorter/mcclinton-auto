@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import About from './About.svelte';
 	import Contact from './Contact.svelte';
 	import Footer from './Footer.svelte';
@@ -12,6 +13,28 @@
 
 	let { data } = $props<{ data: PageData }>();
 	let { reviews, userProfile } = data;
+
+	let currentSection = $state<string | null>('hero');
+	let sections: HTMLElement[] = [];
+
+	onMount(() => {
+		sections = Array.from(document.querySelectorAll('[data-id]')); // Select all sections with data-id
+		//sections is outputing correctly
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						currentSection = entry.target.getAttribute('data-id');
+					}
+				});
+			},
+			{ threshold: 0.6 }
+		);
+
+		// Observe each section
+		sections.forEach((section) => observer.observe(section));
+		return () => observer.disconnect(); // Cleanup on destroy
+	});
 </script>
 
 <svelte:head>
@@ -29,8 +52,11 @@
 </svelte:head>
 
 {#if userProfile}
-	<AdminBar {userProfile} />
-{/if}
+	<AdminBar
+		{userProfile}
+		{currentSection}
+		editLink={currentSection ? `/edit/${currentSection}` : '#'}
+	/>{/if}
 
 <Hero />
 <Services />

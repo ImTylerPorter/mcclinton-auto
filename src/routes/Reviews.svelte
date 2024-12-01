@@ -15,7 +15,7 @@
 	const spaceBetween = 0;
 </script>
 
-<section id="testimonials">
+<section id="testimonials" data-id="Testimonials">
 	<div class="container">
 		<h3>Client Reviews</h3>
 

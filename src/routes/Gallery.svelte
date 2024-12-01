@@ -20,7 +20,7 @@
 	};
 </script>
 
-<section id="gallery">
+<section id="gallery" data-id="Gallery">
 	<div class="container">
 		<h3>Our Gallery</h3>
 		<div class="gallery">

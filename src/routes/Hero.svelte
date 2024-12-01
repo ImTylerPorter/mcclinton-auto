@@ -3,7 +3,7 @@
 	import Nav from './Nav.svelte';
 </script>
 
-<section id="hero">
+<section id="hero" data-id="Hero">
 	<div class="container">
 		<div class="contentContainer">
 			<div class="logo">

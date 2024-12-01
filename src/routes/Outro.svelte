@@ -41,7 +41,7 @@
 	});
 </script>
 
-<section id="outro">
+<section id="outro" data-id="Outro">
 	<div class="container">
 		<div class="content" bind:this={content} class:visible={inView}>
 			<h3>{yearsInBusiness} Years in Business</h3>
