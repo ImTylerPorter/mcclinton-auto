@@ -1,7 +1,6 @@
 <script lang="ts">
 	let { userProfile, currentSection, editLink } = $props();
 	let { firstName, email } = userProfile;
-	// console.log(currentSection, 'currentSection');
 </script>
 
 <section>
@@ -12,14 +11,11 @@
 		<div class="white">
 			{#if currentSection}
 				<span>
-					Viewing: <strong>{currentSection}</strong>
+					<a href={editLink} class="edit-link">EDIT: <strong>{currentSection}</strong></a>
 				</span>
-				<a href={editLink} class="edit-link">Edit</a>
 			{:else}
 				<span>Scroll to a section to edit</span>
 			{/if}
-		</div>
-		<div>
 			<a
 				href="/logout"
 				onclick={(e) =>
