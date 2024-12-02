@@ -5,7 +5,8 @@ import {
   timestamp,
   varchar,
   boolean,
-  jsonb
+  jsonb,
+  unique,
 } from "drizzle-orm/pg-core";
 
 // Profile Table (Existing)
@@ -29,7 +30,9 @@ export const globalSettingsTable = pgTable("global_settings", {
 // Sections Table
 export const sectionsTable = pgTable("sections", {
   id: uuid("id").primaryKey(),
-  sectionName: text("section_name").notNull(), // e.g., "Hero", "Services", etc.
+  sectionName: text("section_name")
+    .notNull()
+    .unique(),
   title: text("title"),
   subTitle: text("sub_title"),
   content: text("content"),
