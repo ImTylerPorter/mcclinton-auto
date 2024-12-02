@@ -8,6 +8,13 @@
       "when": 1732822147576,
       "tag": "0000_secret_rage",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1733166893553,
+      "tag": "0001_bent_thunderbird",
+      "breakpoints": true
     }
   ]
 }
