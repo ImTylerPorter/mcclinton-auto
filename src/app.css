@@ -144,3 +144,8 @@ button:hover,
 .button:hover {
 	background: var(--tan);
 }
+
+.error {
+	color: firebrick;
+	text-align: center;
+}
