@@ -13,7 +13,12 @@
 	} from './formHandlers';
 
 	let { data } = $props<{ data: PageData }>();
-	let { sectionData: section, servicesData: services, galleryData: galleryImages } = data;
+	let {
+		sectionData: section,
+		servicesData: services,
+		galleryData: galleryImages,
+		sectionNames
+	} = data;
 
 	let sectionState = $state<SectionState>({
 		id: section.id,
@@ -49,6 +54,31 @@
 
 	let previousPath = $state('');
 
+	let showSubTitle = $derived(
+		sectionState.sectionName === 'services' || sectionState.sectionName === 'about'
+	);
+
+	let showTagline = $derived(sectionState.sectionName === 'services');
+
+	let showContent = $derived(
+		sectionState.sectionName === 'hero' ||
+			sectionState.sectionName === 'services' ||
+			sectionState.sectionName === 'about' ||
+			sectionState.sectionName === 'contact'
+	);
+
+	let showButton = $derived(
+		sectionState.sectionName === 'hero' ||
+			sectionState.sectionName === 'services' ||
+			sectionState.sectionName === 'outro'
+	);
+
+	let showImage = $derived(
+		sectionState.sectionName === 'services' ||
+			sectionState.sectionName === 'about' ||
+			sectionState.sectionName === 'testimonials'
+	);
+
 	afterNavigate(({ from }) => {
 		previousPath = from?.url.pathname || '';
 	});
@@ -83,50 +113,58 @@
 					<input type="text" name="title" bind:value={sectionState.title} />
 				</label>
 
-				<label>
-					<span>Sub-Title:</span>
-					<input type="text" name="sub_title" bind:value={sectionState.subTitle} />
-				</label>
+				{#if showSubTitle}
+					<label>
+						<span>Sub-Title:</span>
+						<input type="text" name="sub_title" bind:value={sectionState.subTitle} />
+					</label>
+				{/if}
 
-				<label>
-					<span>Tagline:</span>
-					<input type="text" name="tagline" bind:value={sectionState.tagline} />
-				</label>
+				{#if showTagline}
+					<label>
+						<span>Tagline:</span>
+						<input type="text" name="tagline" bind:value={sectionState.tagline} />
+					</label>
+				{/if}
 
-				{#if browser}
+				{#if browser && showContent}
 					<fieldset>
 						<span>Content:</span>
 						<TextEditor bind:content={sectionState.content} />
 					</fieldset>
 				{/if}
 
-				<label>
-					<span>Button Text:</span>
-					<input type="text" name="button_text" bind:value={sectionState.buttonText} />
-				</label>
+				{#if showButton}
+					<label>
+						<span>Button Text:</span>
+						<input type="text" name="button_text" bind:value={sectionState.buttonText} />
+					</label>
 
-				<label>
-					<span>Button Link:</span>
-					<input type="text" name="button_link" bind:value={sectionState.buttonLink} />
-				</label>
+					<label>
+						<span>Button Link:</span>
+						<input type="text" name="button_link" bind:value={sectionState.buttonLink} />
+					</label>
+				{/if}
 
-				<label>
-					<span>Image:</span>
-					{#if previewSrc}
-						<div class="preview">
-							<img src={previewSrc} alt="Preview" />
-						</div>
-					{:else if sectionState.image && typeof sectionState.image === 'string'}
-						<div class="preview">
-							<img src={sectionState.image} alt="Section" />
-						</div>
-					{/if}
-					<input
-						type="file"
-						accept="image/*"
-						onchange={(e) => handleFileChange(e, sectionState, previewSrc)}
-					/>
-				</label>
+				{#if showImage}
+					<label>
+						<span>Image:</span>
+						{#if previewSrc}
+							<div class="preview">
+								<img src={previewSrc} alt="Preview" />
+							</div>
+						{:else if sectionState.image && typeof sectionState.image === 'string'}
+							<div class="preview">
+								<img src={sectionState.image} alt="Section" />
+							</div>
+						{/if}
+						<input
+							type="file"
+							accept="image/*"
+							onchange={(e) => handleFileChange(e, sectionState, previewSrc)}
+						/>
+					</label>
+				{/if}
 
 				{#if sectionState.sectionName === 'services' && servicesState.length}
 					<h3>Services:</h3>

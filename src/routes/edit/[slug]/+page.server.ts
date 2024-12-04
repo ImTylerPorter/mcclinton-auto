@@ -5,9 +5,13 @@ import { error } from '@sveltejs/kit';
 import { getOrCreateUserProfile } from '$lib/auth';
 import type { PageServerLoad, Actions } from './$types';
 import { handleGalleryUpdates, handleSectionUpdate, handleServiceUpdates } from './serverHandlers';
+import type { Section } from '../../../types';
 
 export const load: PageServerLoad = async ({ params }) => {
   const { slug } = params;
+
+  const allSections = await db.select().from(sectionsTable)
+  const sectionNames = allSections.map((item) => item.sectionName);
 
   const sectionData = await db
     .select()
@@ -28,7 +32,7 @@ export const load: PageServerLoad = async ({ params }) => {
     .from(galleryTable)
     .where(eq(galleryTable.sectionId, sectionData[0].id));
 
-  return { sectionData: sectionData[0], servicesData, galleryData };
+  return { sectionData: sectionData[0], servicesData, galleryData, sectionNames };
 };
 
 export const actions: Actions = {
