@@ -6,7 +6,7 @@
 	import { goto, afterNavigate } from '$app/navigation';
 
 	let { data } = $props();
-	let { sectionData: section } = data;
+	let { sectionData: section, servicesData: services } = data;
 
 	let sectionState = $state({
 		id: section.id,
@@ -28,6 +28,23 @@
 		image: File | string | null;
 	});
 
+	let servicesState = $state(
+		services.map(
+			(service) =>
+				({
+					id: service.id,
+					title: service.title || '',
+					imageUrl: service.imageUrl || null,
+					previewSrc: service.imageUrl || null
+				}) as {
+					id: string;
+					title: string;
+					imageUrl: File | string | null;
+					previewSrc: string | null;
+				}
+		)
+	);
+
 	let formError = $state('');
 	let previewSrc = $state('');
 
@@ -47,9 +64,21 @@
 		} else {
 			sectionState.image = null;
 		}
-
 		// Only set the previewSrc for displaying the image preview
 		previewSrc = file ? URL.createObjectURL(file) : '';
+	};
+
+	const handleServiceFileChange = (event: Event, index: number) => {
+		const target = event.target as HTMLInputElement;
+		const file = target.files ? target.files[0] : null;
+
+		if (file) {
+			servicesState[index].imageUrl = file; // Assign the file
+			servicesState[index].previewSrc = URL.createObjectURL(file); // Optional: for preview
+		} else {
+			servicesState[index].imageUrl = null;
+			servicesState[index].previewSrc = null; // Optional
+		}
 	};
 
 	async function handleSubmit(event: SubmitEvent) {
@@ -61,6 +90,18 @@
 		if (sectionState.image && sectionState.image instanceof File) {
 			formData.set('image', sectionState.image); // Send the actual file object
 		}
+
+		// Iterate over servicesState and append each service data individually
+		servicesState.forEach((service, index) => {
+			formData.append(`services[${index}][id]`, service.id);
+			formData.append(`services[${index}][title]`, service.title);
+
+			// Append the image file if it's a File object
+			if (service.imageUrl && service.imageUrl instanceof File) {
+				formData.append(`services[${index}][image]`, service.imageUrl);
+			}
+		});
+
 		try {
 			const response = await fetch($page.url.pathname, {
 				method: 'POST',
@@ -144,6 +185,37 @@
 					<input type="file" accept="image/*" onchange={handleFileChange} />
 				</label>
 
+				{#if section.sectionName === 'services' && services.length}
+					<h3>Services:</h3>
+					{#each servicesState as service, index}
+						<label>
+							<span>Title:</span>
+							<input
+								type="text"
+								name={'service_' + index}
+								bind:value={servicesState[index].title}
+							/>
+						</label>
+						<label>
+							<span>Image:</span>
+							{#if servicesState[index].previewSrc}
+								<div class="preview">
+									<img src={servicesState[index].previewSrc} alt="Preview" />
+								</div>
+							{:else if servicesState[index].imageUrl && typeof servicesState[index].imageUrl === 'string'}
+								<div class="preview">
+									<img src={servicesState[index].imageUrl} alt="Section" />
+								</div>
+							{/if}
+							<input
+								type="file"
+								accept="image/*"
+								onchange={(e) => handleServiceFileChange(e, index)}
+							/>
+						</label>
+					{/each}
+				{/if}
+
 				<button type="submit">Submit</button>
 			</form>
 		</div>
@@ -196,6 +268,12 @@
 
 	h1 {
 		text-transform: capitalize;
+	}
+	h3 {
+		margin-inline: 20px;
+		margin-bottom: 0;
+		color: var(--green);
+		border-bottom: 1px solid var(--green);
 	}
 	form {
 		margin: 20px auto;
