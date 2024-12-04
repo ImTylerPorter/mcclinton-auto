@@ -35,7 +35,7 @@ export const actions = {
     const tagline = data.get('tagline') as string | null;
     const content = data.get('content') as string | null
     const buttonText = data.get('button_text') as string | null
-
+    const image = data.get('image') as File | null
 
     // Validate the 'id' field
     if (!id) {
@@ -51,11 +51,38 @@ export const actions = {
       subTitle,
       tagline,
       content,
-      buttonText
+      buttonText,
+
 
     }).where(eq(sectionsTable.id, id)).returning({
       id: sectionsTable.id,
     });;
+
+
+    if (image && image instanceof File) {
+      console.log(image.name)
+      const fileName = `${Date.now()}-${image.name}` || 'default_profile.jpg'; // Default name if not provided
+      const { data: uploadData, error: uploadError } = await locals.supabase.storage
+         .from('website-images')
+         .upload(`${fileName}`, image, {
+          metadata: { userId: userProfile.id },
+          // upsert: true
+
+        });
+
+       if (uploadError) {
+        error(401, uploadError.message);
+      }
+
+      const publicUrl = locals.supabase.storage
+      .from('website-images')
+      .getPublicUrl(fileName).data.publicUrl;
+
+      await db.update(sectionsTable).set({
+        image: publicUrl,
+      }).where(eq(sectionsTable.id, id));
+
+    }
 
 
     return { success: true };

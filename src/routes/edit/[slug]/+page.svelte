@@ -14,17 +14,45 @@
 		tagline: section.tagline || '',
 		content: section.content || '',
 		buttonText: section.buttonText || '',
-		buttonLink: section.buttonLink || ''
+		buttonLink: section.buttonLink || '',
+		image: section.image || null
+	} as {
+		id: string;
+		title: string;
+		subTitle: string;
+		tagline: string;
+		content: string;
+		buttonText: string;
+		buttonLink: string;
+		image: File | string | null;
 	});
 
 	let formError = $state('');
+	let previewSrc = $state('');
+
+	const handleFileChange = (event: Event) => {
+		const target = event.target as HTMLInputElement;
+		const file = target.files ? target.files[0] : null;
+
+		if (file) {
+			sectionState.image = file; // Store the file directly, not the Blob URL
+		} else {
+			sectionState.image = null;
+		}
+
+		// Only set the previewSrc for displaying the image preview
+		previewSrc = file ? URL.createObjectURL(file) : '';
+	};
 
 	async function handleSubmit(event: SubmitEvent) {
 		event.preventDefault();
 		const formData = new FormData(event.target as HTMLFormElement);
 		formData.append('id', sectionState.id);
 		formData.append('content', sectionState.content); // Append updated content
-		console.log(sectionState.content);
+
+		if (sectionState.image && sectionState.image instanceof File) {
+			formData.set('image', sectionState.image); // Send the actual file object
+		}
 		try {
 			const response = await fetch($page.url.pathname, {
 				method: 'POST',
@@ -47,7 +75,7 @@
 	<div class="container">
 		<div class="card">
 			<h1>Editing {section.sectionName}</h1>
-			<form onsubmit={handleSubmit}>
+			<form onsubmit={handleSubmit} enctype="multipart/form-data">
 				{#if formError}
 					<p class="error">{formError}</p>
 				{/if}
@@ -81,6 +109,21 @@
 					<span>Button Link:</span>
 					<input type="url" name="button_link" bind:value={sectionState.buttonLink} />
 				</label>
+
+				<label>
+					<span>Image:</span>
+					{#if previewSrc}
+						<div class="preview">
+							<img src={previewSrc} alt="Preview" />
+						</div>
+					{:else if sectionState.image && typeof sectionState.image === 'string'}
+						<div class="preview">
+							<img src={sectionState.image} alt="Section" />
+						</div>
+					{/if}
+					<input type="file" accept="image/*" onchange={handleFileChange} />
+				</label>
+
 				<button type="submit">Submit</button>
 			</form>
 		</div>
@@ -144,5 +187,16 @@
 		border: none;
 		display: block;
 		margin: 20px auto;
+	}
+
+	.preview {
+		width: 100%;
+		height: auto;
+		/* margin-top: 20px; */
+	}
+
+	.preview img {
+		width: 200px;
+		max-width: 100%;
 	}
 </style>
