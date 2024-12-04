@@ -52,7 +52,7 @@
 <main>
 	<div class="container">
 		<div class="card">
-			<button class="back" on:click={goBack}>
+			<button class="back" onclick={goBack}>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
 					<path
 						d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
@@ -61,7 +61,7 @@
 				<span>Go Back</span>
 			</button>
 			<h1>Editing {sectionState.sectionName}</h1>
-			<form on:submit={handleFormSubmit} enctype="multipart/form-data">
+			<form onsubmit={handleFormSubmit} enctype="multipart/form-data">
 				{#if formError}
 					<p class="error">{formError}</p>
 				{/if}
@@ -111,7 +111,7 @@
 					<input
 						type="file"
 						accept="image/*"
-						on:change={(e) => handleFileChange(e, sectionState, previewSrc)}
+						onchange={(e) => handleFileChange(e, sectionState, previewSrc)}
 					/>
 				</label>
 
@@ -140,7 +140,7 @@
 							<input
 								type="file"
 								accept="image/*"
-								on:change={(e) => handleServiceFileChange(e, index, servicesState)}
+								onchange={(e) => handleServiceFileChange(e, index, servicesState)}
 							/>
 						</label>
 					{/each}

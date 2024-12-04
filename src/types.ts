@@ -6,7 +6,7 @@ export type PageData = {
 	}[];
 };
 
-export type Section {
+export type Section = {
   id: string;
   title: string;
   subTitle: string;
@@ -18,7 +18,7 @@ export type Section {
   sectionName: string;
 }
 
-export type Service {
+export type Service = {
   id: string;
   title: string;
   imageUrl: string | null;
