@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import { getOrCreateUserProfile } from '$lib/auth';
 
+
 export const load = async ({ params }) => {
   const { slug } = params;
 
