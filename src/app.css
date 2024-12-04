@@ -149,3 +149,7 @@ button:hover,
 	color: firebrick;
 	text-align: center;
 }
+
+.ql-snow {
+	border-color: var(--green) !important;
+}

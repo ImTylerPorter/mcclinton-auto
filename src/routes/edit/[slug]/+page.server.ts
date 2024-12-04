@@ -31,6 +31,11 @@ export const actions = {
     const data = await request.formData();
     const id = data.get('id') as string | null;
     const title = data.get('title') as string | null;
+    const subTitle = data.get('sub_title') as string | null;
+    const tagline = data.get('tagline') as string | null;
+    const content = data.get('content') as string | null
+    const buttonText = data.get('button_text') as string | null
+
 
     // Validate the 'id' field
     if (!id) {
@@ -43,10 +48,13 @@ export const actions = {
 
     const updatedSectionResult = await db.update(sectionsTable).set({
       title,
+      subTitle,
+      tagline,
+      content,
+      buttonText
 
     }).where(eq(sectionsTable.id, id)).returning({
       id: sectionsTable.id,
-      title: sectionsTable.title,
     });;
 
 

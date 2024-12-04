@@ -54,7 +54,7 @@
 	<AdminBar
 		{userProfile}
 		{currentSection}
-		editLink={currentSection ? `/edit/${currentSection}` : '#'}
+		editLink={currentSection ? `/edit/${currentSection.toLowerCase()}` : '#'}
 	/>{/if}
 
 <Hero />

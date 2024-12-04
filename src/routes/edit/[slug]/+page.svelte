@@ -1,12 +1,20 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import { capitalize } from '$lib/helpers/index';
+	import TextEditor from '../../../components/TextEditor.svelte';
+
 	let { data } = $props();
 	let { sectionData: section } = data;
 
 	let sectionState = $state({
 		id: section.id,
-		title: section.title || ''
+		title: section.title || '',
+		subTitle: section.subTitle || '',
+		tagline: section.tagline || '',
+		content: section.content || '',
+		buttonText: section.buttonText || '',
+		buttonLink: section.buttonLink || ''
 	});
 
 	let formError = $state('');
@@ -15,7 +23,8 @@
 		event.preventDefault();
 		const formData = new FormData(event.target as HTMLFormElement);
 		formData.append('id', sectionState.id);
-
+		formData.append('content', sectionState.content); // Append updated content
+		console.log(sectionState.content);
 		try {
 			const response = await fetch($page.url.pathname, {
 				method: 'POST',
@@ -46,6 +55,32 @@
 					<span>Title:</span>
 					<input type="text" name="title" bind:value={sectionState.title} />
 				</label>
+
+				<label>
+					<span>Sub-Title:</span>
+					<input type="text" name="sub_title" bind:value={sectionState.subTitle} />
+				</label>
+
+				<label>
+					<span>Tagline:</span>
+					<input type="text" name="tagline" bind:value={sectionState.tagline} />
+				</label>
+				{#if browser}
+					<fieldset>
+						<span>Content:</span>
+						<TextEditor bind:content={sectionState.content} />
+					</fieldset>
+				{/if}
+
+				<label>
+					<span>Button Text:</span>
+					<input type="text" name="button_text" bind:value={sectionState.buttonText} />
+				</label>
+
+				<label>
+					<span>Button Link:</span>
+					<input type="url" name="button_link" bind:value={sectionState.buttonLink} />
+				</label>
 				<button type="submit">Submit</button>
 			</form>
 		</div>
@@ -62,11 +97,11 @@
 		justify-content: center;
 		flex-direction: column;
 		width: 400px;
-		height: 100vh;
+		min-height: 100vh;
 		max-width: 90%;
 	}
 	.card {
-		margin: 0 auto;
+		margin: 50px auto;
 		background: var(--background-light);
 		width: 100%;
 		box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
@@ -76,6 +111,9 @@
 	}
 	form {
 		margin: 20px auto;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
 	}
 	label {
 		display: flex;
@@ -83,6 +121,12 @@
 		padding: 0 20px;
 	}
 
+	fieldset {
+		padding: 0 20px;
+		border: 0;
+	}
+
+	fieldset span,
 	label span {
 		font-size: 1rem;
 	}
