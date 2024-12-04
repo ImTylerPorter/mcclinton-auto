@@ -47,7 +47,7 @@
 	};
 </script>
 
-<section id="contact">
+<section id="contact" data-id="Contact">
 	<div class="container">
 		<div class="contactBox">
 			{#if !messageSent}
