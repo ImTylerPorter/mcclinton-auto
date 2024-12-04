@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
-	import { capitalize } from '$lib/helpers/index';
 	import TextEditor from '../../../components/TextEditor.svelte';
 	import { goto, afterNavigate } from '$app/navigation';
+	import type { PageData } from './$types';
+	import type { SectionState, ServiceState, Service } from '../../../types';
+	import { handleFileChange, handleServiceFileChange, handleSubmit } from './formHandlers';
 
-	let { data } = $props();
+	let { data } = $props<{ data: PageData }>();
 	let { sectionData: section, servicesData: services } = data;
 
-	let sectionState = $state({
+	let sectionState = $state<SectionState>({
 		id: section.id,
 		title: section.title || '',
 		subTitle: section.subTitle || '',
@@ -16,127 +18,50 @@
 		content: section.content || '',
 		buttonText: section.buttonText || '',
 		buttonLink: section.buttonLink || '',
-		image: section.image || null
-	} as {
-		id: string;
-		title: string;
-		subTitle: string;
-		tagline: string;
-		content: string;
-		buttonText: string;
-		buttonLink: string;
-		image: File | string | null;
+		image: section.image || null,
+		sectionName: section.sectionName
 	});
 
-	let servicesState = $state(
-		services.map(
-			(service) =>
-				({
-					id: service.id,
-					title: service.title || '',
-					imageUrl: service.imageUrl || null,
-					previewSrc: service.imageUrl || null
-				}) as {
-					id: string;
-					title: string;
-					imageUrl: File | string | null;
-					previewSrc: string | null;
-				}
-		)
+	let servicesState = $state<ServiceState[]>(
+		services.map((service: Service) => ({
+			id: service.id,
+			title: service.title || '',
+			imageUrl: service.imageUrl || null,
+			previewSrc: service.imageUrl || null
+		}))
 	);
 
 	let formError = $state('');
 	let previewSrc = $state('');
 
-	let previousPath = '';
+	let previousPath = $state('');
 
 	afterNavigate(({ from }) => {
-		// Store the path of the page we came from
 		previousPath = from?.url.pathname || '';
 	});
-
-	const handleFileChange = (event: Event) => {
-		const target = event.target as HTMLInputElement;
-		const file = target.files ? target.files[0] : null;
-
-		if (file) {
-			sectionState.image = file; // Store the file directly, not the Blob URL
-		} else {
-			sectionState.image = null;
-		}
-		// Only set the previewSrc for displaying the image preview
-		previewSrc = file ? URL.createObjectURL(file) : '';
-	};
-
-	const handleServiceFileChange = (event: Event, index: number) => {
-		const target = event.target as HTMLInputElement;
-		const file = target.files ? target.files[0] : null;
-
-		if (file) {
-			servicesState[index].imageUrl = file; // Assign the file
-			servicesState[index].previewSrc = URL.createObjectURL(file); // Optional: for preview
-		} else {
-			servicesState[index].imageUrl = null;
-			servicesState[index].previewSrc = null; // Optional
-		}
-	};
-
-	async function handleSubmit(event: SubmitEvent) {
-		event.preventDefault();
-		const formData = new FormData(event.target as HTMLFormElement);
-		formData.append('id', sectionState.id);
-		formData.append('content', sectionState.content); // Append updated content
-
-		if (sectionState.image && sectionState.image instanceof File) {
-			formData.set('image', sectionState.image); // Send the actual file object
-		}
-
-		// Iterate over servicesState and append each service data individually
-		servicesState.forEach((service, index) => {
-			formData.append(`services[${index}][id]`, service.id);
-			formData.append(`services[${index}][title]`, service.title);
-
-			// Append the image file if it's a File object
-			if (service.imageUrl && service.imageUrl instanceof File) {
-				formData.append(`services[${index}][image]`, service.imageUrl);
-			}
-		});
-
-		try {
-			const response = await fetch($page.url.pathname, {
-				method: 'POST',
-				body: formData
-			});
-			const result = await response.json();
-
-			if (response.ok) {
-				window.location.href = `/?message=${capitalize(section.sectionName)}%20Successfully%20Updated`;
-			} else {
-				formError = result.error?.message || 'Operation failed.';
-			}
-		} catch (err) {
-			formError = 'An error occurred.';
-		}
-	}
 
 	const goBack = () => {
 		goto(previousPath);
 	};
+
+	function handleFormSubmit(event: SubmitEvent) {
+		handleSubmit(event, sectionState, servicesState, formError, $page.url.pathname);
+	}
 </script>
 
 <main>
 	<div class="container">
 		<div class="card">
-			<button class="back" onclick={() => goBack()}>
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"
-					><path
+			<button class="back" on:click={goBack}>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+					<path
 						d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
-					/></svg
-				>
+					/>
+				</svg>
 				<span>Go Back</span>
 			</button>
-			<h1>Editing {section.sectionName}</h1>
-			<form onsubmit={handleSubmit} enctype="multipart/form-data">
+			<h1>Editing {sectionState.sectionName}</h1>
+			<form on:submit={handleFormSubmit} enctype="multipart/form-data">
 				{#if formError}
 					<p class="error">{formError}</p>
 				{/if}
@@ -154,6 +79,7 @@
 					<span>Tagline:</span>
 					<input type="text" name="tagline" bind:value={sectionState.tagline} />
 				</label>
+
 				{#if browser}
 					<fieldset>
 						<span>Content:</span>
@@ -182,10 +108,14 @@
 							<img src={sectionState.image} alt="Section" />
 						</div>
 					{/if}
-					<input type="file" accept="image/*" onchange={handleFileChange} />
+					<input
+						type="file"
+						accept="image/*"
+						on:change={(e) => handleFileChange(e, sectionState, previewSrc)}
+					/>
 				</label>
 
-				{#if section.sectionName === 'services' && services.length}
+				{#if sectionState.sectionName === 'services' && servicesState.length}
 					<h3>Services:</h3>
 					{#each servicesState as service, index}
 						<label>
@@ -210,7 +140,7 @@
 							<input
 								type="file"
 								accept="image/*"
-								onchange={(e) => handleServiceFileChange(e, index)}
+								on:change={(e) => handleServiceFileChange(e, index, servicesState)}
 							/>
 						</label>
 					{/each}
