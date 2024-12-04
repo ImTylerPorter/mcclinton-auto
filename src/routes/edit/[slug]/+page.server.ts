@@ -36,6 +36,7 @@ export const actions = {
     const tagline = data.get('tagline') as string | null;
     const content = data.get('content') as string | null
     const buttonText = data.get('button_text') as string | null
+    const buttonLink = data.get('button_link') as string | null
     const image = data.get('image') as File | null
 
     // Validate the 'id' field
@@ -53,8 +54,7 @@ export const actions = {
       tagline,
       content,
       buttonText,
-
-
+      buttonLink
     }).where(eq(sectionsTable.id, id)).returning({
       id: sectionsTable.id,
     });;

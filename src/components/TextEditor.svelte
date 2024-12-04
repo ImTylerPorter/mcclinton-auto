@@ -22,7 +22,7 @@
 				}
 			});
 
-			editor.setContents(editor.clipboard.convert(content));
+			editor.root.innerHTML = content;
 
 			editor.on('text-change', () => {
 				const html = editor.root.innerHTML;
