@@ -57,7 +57,7 @@
 		editLink={currentSection ? `/edit/${currentSection.toLowerCase()}` : '#'}
 	/>{/if}
 
-<Hero />
+<Hero {userProfile} />
 <Services />
 <About />
 <Reviews {reviews} />

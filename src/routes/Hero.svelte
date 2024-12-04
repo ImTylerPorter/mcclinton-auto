@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Logo from '../components/Logo.svelte';
 	import Nav from './Nav.svelte';
+	let { userProfile } = $props();
 </script>
 
-<section id="hero" data-id="Hero">
+<section id="hero" data-id="Hero" class:signedIn={userProfile}>
 	<div class="container">
 		<div class="contentContainer">
 			<div class="logo">
@@ -78,6 +79,10 @@
 		width: 100%;
 		background: rgba(0, 0, 0, 0.55);
 		z-index: 1;
+	}
+
+	.signedIn {
+		margin-top: 39.5px;
 	}
 
 	@media (max-width: 600px) {

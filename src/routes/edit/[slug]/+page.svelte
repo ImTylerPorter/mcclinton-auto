@@ -127,7 +127,7 @@
 
 				<label>
 					<span>Button Link:</span>
-					<input type="url" name="button_link" bind:value={sectionState.buttonLink} />
+					<input type="text" name="button_link" bind:value={sectionState.buttonLink} />
 				</label>
 
 				<label>
