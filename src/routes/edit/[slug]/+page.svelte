@@ -11,6 +11,7 @@
 		handleGalleryFileChange,
 		handleSubmit
 	} from './formHandlers';
+	import { getSectionConfig } from '$lib/sectionConfig';
 
 	let { data } = $props<{ data: PageData }>();
 	let {
@@ -51,33 +52,9 @@
 
 	let formError = $state('');
 	let previewSrc = $state('');
-
 	let previousPath = $state('');
 
-	let showSubTitle = $derived(
-		sectionState.sectionName === 'services' || sectionState.sectionName === 'about'
-	);
-
-	let showTagline = $derived(sectionState.sectionName === 'services');
-
-	let showContent = $derived(
-		sectionState.sectionName === 'hero' ||
-			sectionState.sectionName === 'services' ||
-			sectionState.sectionName === 'about' ||
-			sectionState.sectionName === 'contact'
-	);
-
-	let showButton = $derived(
-		sectionState.sectionName === 'hero' ||
-			sectionState.sectionName === 'services' ||
-			sectionState.sectionName === 'outro'
-	);
-
-	let showImage = $derived(
-		sectionState.sectionName === 'services' ||
-			sectionState.sectionName === 'about' ||
-			sectionState.sectionName === 'testimonials'
-	);
+	let sectionConfig = $derived(getSectionConfig(sectionState.sectionName));
 
 	afterNavigate(({ from }) => {
 		previousPath = from?.url.pathname || '';
@@ -113,28 +90,28 @@
 					<input type="text" name="title" bind:value={sectionState.title} />
 				</label>
 
-				{#if showSubTitle}
+				{#if sectionConfig.showSubTitle}
 					<label>
 						<span>Sub-Title:</span>
 						<input type="text" name="sub_title" bind:value={sectionState.subTitle} />
 					</label>
 				{/if}
 
-				{#if showTagline}
+				{#if sectionConfig.showTagline}
 					<label>
 						<span>Tagline:</span>
 						<input type="text" name="tagline" bind:value={sectionState.tagline} />
 					</label>
 				{/if}
 
-				{#if browser && showContent}
+				{#if browser && sectionConfig.showContent}
 					<fieldset>
 						<span>Content:</span>
 						<TextEditor bind:content={sectionState.content} />
 					</fieldset>
 				{/if}
 
-				{#if showButton}
+				{#if sectionConfig.showButton}
 					<label>
 						<span>Button Text:</span>
 						<input type="text" name="button_text" bind:value={sectionState.buttonText} />
@@ -146,7 +123,7 @@
 					</label>
 				{/if}
 
-				{#if showImage}
+				{#if sectionConfig.showImage}
 					<label>
 						<span>Image:</span>
 						{#if previewSrc}
