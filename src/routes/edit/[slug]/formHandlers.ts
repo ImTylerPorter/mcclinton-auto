@@ -1,4 +1,4 @@
-import type { SectionState, ServiceState } from '../../../types';
+import type { SectionState, ServiceState, GalleryState } from '../../../types';
 import { goto } from '$app/navigation';
 import { capitalize } from '$lib/helpers/index';
 
@@ -27,7 +27,20 @@ export function handleServiceFileChange(event: Event, index: number, servicesSta
   }
 }
 
-export async function handleSubmit(event: SubmitEvent, sectionState: SectionState, servicesState: ServiceState[], formError: string, currentPath: string) {
+export function handleGalleryFileChange(event: Event, index: number, galleryState: GalleryState[]) {
+  const target = event.target as HTMLInputElement;
+  const file = target.files ? target.files[0] : null;
+
+  if (file) {
+    galleryState[index].imageUrl = file;
+    galleryState[index].previewSrc = URL.createObjectURL(file);
+  } else {
+    galleryState[index].imageUrl = null;
+    galleryState[index].previewSrc = null;
+  }
+}
+
+export async function handleSubmit(event: SubmitEvent, sectionState: SectionState, servicesState: ServiceState[], galleryState: GalleryState[], formError: string, currentPath: string) {
   event.preventDefault();
   const formData = new FormData(event.target as HTMLFormElement);
   formData.append('id', sectionState.id);
@@ -43,6 +56,14 @@ export async function handleSubmit(event: SubmitEvent, sectionState: SectionStat
 
     if (service.imageUrl && service.imageUrl instanceof File) {
       formData.append(`services[${index}][image]`, service.imageUrl);
+    }
+  });
+
+  galleryState.forEach((gallery, index) => {
+    formData.append(`gallery[${index}][id]`, gallery.id);
+
+    if (gallery.imageUrl && gallery.imageUrl instanceof File) {
+      formData.append(`gallery[${index}][image]`, gallery.imageUrl);
     }
   });
 

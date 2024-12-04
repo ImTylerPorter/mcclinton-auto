@@ -24,11 +24,22 @@ export type Service = {
   imageUrl: string | null;
 }
 
+
+export type Gallery = {
+  id: string;
+  imageUrl: string | null;
+}
+
 export interface SectionState extends Omit<Section, 'image'> {
   image: File | string | null;
 }
 
 export interface ServiceState extends Omit<Service, 'imageUrl'> {
+  imageUrl: File | string | null;
+  previewSrc: string | null;
+}
+
+export interface GalleryState extends Omit<Gallery, 'imageUrl'> {
   imageUrl: File | string | null;
   previewSrc: string | null;
 }

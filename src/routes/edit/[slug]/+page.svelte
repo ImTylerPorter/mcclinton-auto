@@ -4,11 +4,16 @@
 	import TextEditor from '../../../components/TextEditor.svelte';
 	import { goto, afterNavigate } from '$app/navigation';
 	import type { PageData } from './$types';
-	import type { SectionState, ServiceState, Service } from '../../../types';
-	import { handleFileChange, handleServiceFileChange, handleSubmit } from './formHandlers';
+	import type { SectionState, ServiceState, GalleryState, Service, Gallery } from '../../../types';
+	import {
+		handleFileChange,
+		handleServiceFileChange,
+		handleGalleryFileChange,
+		handleSubmit
+	} from './formHandlers';
 
 	let { data } = $props<{ data: PageData }>();
-	let { sectionData: section, servicesData: services } = data;
+	let { sectionData: section, servicesData: services, galleryData: galleryImages } = data;
 
 	let sectionState = $state<SectionState>({
 		id: section.id,
@@ -31,6 +36,14 @@
 		}))
 	);
 
+	let galleryState = $state<GalleryState[]>(
+		galleryImages.map((gallery: Gallery) => ({
+			id: gallery.id,
+			imageUrl: gallery.imageUrl || null,
+			previewSrc: gallery.imageUrl || null
+		}))
+	);
+
 	let formError = $state('');
 	let previewSrc = $state('');
 
@@ -45,7 +58,7 @@
 	};
 
 	function handleFormSubmit(event: SubmitEvent) {
-		handleSubmit(event, sectionState, servicesState, formError, $page.url.pathname);
+		handleSubmit(event, sectionState, servicesState, galleryState, formError, $page.url.pathname);
 	}
 </script>
 
@@ -141,6 +154,29 @@
 								type="file"
 								accept="image/*"
 								onchange={(e) => handleServiceFileChange(e, index, servicesState)}
+							/>
+						</label>
+					{/each}
+				{/if}
+
+				{#if sectionState.sectionName === 'gallery' && galleryState.length}
+					<h3>Gallery:</h3>
+					{#each galleryState as gallery, index}
+						<label>
+							<span>Image:</span>
+							{#if galleryState[index].previewSrc}
+								<div class="preview">
+									<img src={galleryState[index].previewSrc} alt="Preview" />
+								</div>
+							{:else if galleryState[index].imageUrl && typeof galleryState[index].imageUrl === 'string'}
+								<div class="preview">
+									<img src={galleryState[index].imageUrl} alt="Gallery" />
+								</div>
+							{/if}
+							<input
+								type="file"
+								accept="image/*"
+								onchange={(e) => handleGalleryFileChange(e, index, galleryState)}
 							/>
 						</label>
 					{/each}

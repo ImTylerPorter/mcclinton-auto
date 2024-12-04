@@ -1,10 +1,10 @@
 import { db } from '$lib/db';
-import { sectionsTable, servicesTable } from '$lib/db/schema';
+import { galleryTable, sectionsTable, servicesTable } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import { getOrCreateUserProfile } from '$lib/auth';
 import type { PageServerLoad, Actions } from './$types';
-import { handleSectionUpdate, handleServiceUpdates } from './serverHandlers';
+import { handleGalleryUpdates, handleSectionUpdate, handleServiceUpdates } from './serverHandlers';
 
 export const load: PageServerLoad = async ({ params }) => {
   const { slug } = params;
@@ -23,7 +23,12 @@ export const load: PageServerLoad = async ({ params }) => {
     .from(servicesTable)
     .where(eq(servicesTable.sectionId, sectionData[0].id));
 
-  return { sectionData: sectionData[0], servicesData };
+    const galleryData = await db
+    .select()
+    .from(galleryTable)
+    .where(eq(galleryTable.sectionId, sectionData[0].id));
+
+  return { sectionData: sectionData[0], servicesData, galleryData };
 };
 
 export const actions: Actions = {
@@ -43,6 +48,7 @@ export const actions: Actions = {
 
     await handleSectionUpdate(data, id, locals, userProfile.id);
     await handleServiceUpdates(data, locals, userProfile.id);
+    await handleGalleryUpdates(data, locals, userProfile.id);
 
     return { success: true };
   }

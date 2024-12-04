@@ -1,5 +1,5 @@
 import { db } from '$lib/db';
-import { sectionsTable, servicesTable } from '$lib/db/schema';
+import { sectionsTable, servicesTable, galleryTable } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 
@@ -82,6 +82,45 @@ export async function handleServiceUpdates(data: FormData, locals: App.Locals, u
       title: serviceTitle,
       imageUrl: serviceImageUrl ? serviceImageUrl : undefined,
     }).where(eq(servicesTable.id, serviceId));
+
+    index++;
+  }
+}
+
+
+export async function handleGalleryUpdates(data: FormData, locals: App.Locals, userId: string) {
+  let index = 0;
+  while (data.has(`gallery[${index}][id]`)) {
+    const galleryId = data.get(`gallery[${index}][id]`) as string | null;
+    const galleryImage = data.get(`gallery[${index}][image]`) as File | null;
+
+    if (!galleryId) {
+      index++;
+      continue;
+    }
+
+    let galleryImageUrl = null;
+
+    if (galleryImage && galleryImage instanceof File) {
+      const galleryFileName = `${Date.now()}-${galleryImage.name}`;
+      const { data: galleryUploadData, error: galleryUploadError } = await locals.supabase.storage
+        .from('website-images')
+        .upload(galleryFileName, galleryImage, {
+          metadata: { userId }
+        });
+
+      if (galleryUploadError) {
+        throw error(401, galleryUploadError.message);
+      }
+
+      galleryImageUrl = locals.supabase.storage
+        .from('website-images')
+        .getPublicUrl(galleryFileName).data.publicUrl;
+    }
+
+    await db.update(galleryTable).set({
+      imageUrl: galleryImageUrl ? galleryImageUrl : undefined,
+    }).where(eq(galleryTable.id, galleryId));
 
     index++;
   }
