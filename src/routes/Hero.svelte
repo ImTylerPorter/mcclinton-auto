@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Logo from '../components/Logo.svelte';
 	import Nav from './Nav.svelte';
-	let { userProfile } = $props();
+	let { userProfile, data } = $props();
 </script>
 
 <section id="hero" data-id="Hero" class:signedIn={userProfile}>

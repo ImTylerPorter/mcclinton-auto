@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-
+	let { data } = $props();
 	// States for form data
 	let name = $state('');
 	let email = $state('');

@@ -2,15 +2,7 @@
 	import { register } from 'swiper/element/bundle';
 	register();
 
-	// Define the props interface
-	interface Props {
-		error?: string | null; // Optional error property
-		reviews: Array<{ comment: string; customerName: string; carMake: string }> | string; // Array of review objects or a string
-	}
-
-	// Props declaration
-	export let error: Props['error'] = null; // Default value for error
-	export let reviews: Props['reviews'];
+	let { reviews, data } = $props();
 
 	const spaceBetween = 0;
 </script>
@@ -55,9 +47,7 @@
 						slides-per-view={1}
 						space-between={spaceBetween}
 					>
-						{#if error}
-							<p>Error: {error}</p>
-						{:else if reviews && reviews.length > 0}
+						{#if reviews && reviews.length > 0}
 							{#each reviews as review}
 								{#if typeof review !== 'string'}
 									<swiper-slide>

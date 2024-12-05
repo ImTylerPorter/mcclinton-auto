@@ -3,13 +3,15 @@ import formData from 'form-data'; // Make sure to import form-data
 import { error } from '@sveltejs/kit';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-
+import { db} from '$lib/db'
 import { VITE_MAILGUN_API_KEY, VITE_EMAIL_TO } from '$env/static/private'; // Import server-side env variables
 import { getOrCreateUserProfile } from '$lib/auth/index.js';
-
+import { sectionsTable, galleryTable, servicesTable } from '$lib/db/schema';
+import { eq } from 'drizzle-orm';
 // Initialize Mailgun
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({ username: 'api', key: VITE_MAILGUN_API_KEY });
+
 
 type Review = {
   comment: string;
@@ -20,6 +22,20 @@ type Review = {
 type LoadResponse = {
   reviews?: Review[];
   userProfile?: any;
+  allSections?: {
+    id: string;
+    sectionName: string;
+    title: string | null;
+    subTitle: string | null;
+    content: string | null;
+    tagline: string | null;
+    buttonText: string | null;
+    buttonLink: string | null;
+    image: string | null;
+    extraData: unknown;
+  }[];
+  galleryData?: Record<string, { imageUrl: string }[]>;
+  servicesData?: Record<string, { title: string; imageUrl: string | null }[]>; // Add servicesData
   error?: string;
 };
 
@@ -81,40 +97,40 @@ export const actions = {
 
 export async function load({ locals }): Promise<LoadResponse> {
   try {
-    // Scraping reviews
-    const url =
-      'https://www.carwise.com/auto-body-shops/shopPlugin?rfid=555006&re=1&type=f&theme=&size=m&zip=&demo=f&ap=false';
-    const { data } = await axios.get<string>(url); // Specify the type of response data
-
-    const $ = cheerio.load(data);
-    let reviews: Review[] = []; // Initialize reviews with the defined type
-
-    $('#reviewList li.reviewListItem').each((i, elem) => {
-      const comment = $(elem).find('.comment').text().trim();
-      const customerName = $(elem).find('.customerName').text().trim();
-      const carMake = $(elem).find('.carMake').text().trim();
-
-      if (comment !== '') {
-        reviews.push({
-          comment,
-          customerName,
-          carMake,
-        });
-      }
-    });
-
-    // Loading user profile
+    // Load user profile and sections
     const userProfile = await getOrCreateUserProfile(locals);
+    const allSections = await db.select().from(sectionsTable);
 
-    // Return both reviews and userProfile
+    // Fetch gallery data
+    const gallerySections = allSections.filter((section) => section.sectionName === 'gallery');
+    const galleryData: Record<string, { imageUrl: string }[]> = {};
+    for (const section of gallerySections) {
+      const images = await db
+        .select()
+        .from(galleryTable)
+        .where(eq(galleryTable.sectionId, section.id));
+      galleryData[section.id] = images; // Store images by section ID
+    }
+
+    // Fetch services data
+    const servicesSections = allSections.filter((section) => section.sectionName === 'services');
+    const servicesData: Record<string, { title: string; imageUrl: string | null }[]> = {};
+    for (const section of servicesSections) {
+      const services = await db
+        .select()
+        .from(servicesTable)
+        .where(eq(servicesTable.sectionId, section.id));
+      servicesData[section.id] = services; // Store services by section ID
+    }
+
     return {
-      reviews,
       userProfile,
+      allSections,
+      galleryData,
+      servicesData, // Include servicesData
     };
   } catch (error) {
     console.error('Error occurred:', error);
-    return {
-      error: 'Failed to load data',
-    };
+    return { error: 'Failed to load data' };
   }
 }

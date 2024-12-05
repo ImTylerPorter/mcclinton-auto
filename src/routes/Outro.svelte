@@ -14,7 +14,7 @@
 	const earliestWorkedOn = currentYear - 15;
 
 	// Props for optional observer
-	let { observer }: { observer?: IntersectionObserver } = $props();
+	let { data, observer }: { data?: any; observer?: IntersectionObserver } = $props();
 
 	// Lifecycle hook
 	onMount(() => {

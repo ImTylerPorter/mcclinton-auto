@@ -1,14 +1,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import ServicesList from './ServicesList.svelte';
-
 	let inView = $state(false);
 	// Explicitly type as HTMLElement or null
 	let imageElement: HTMLElement | null = null;
 	let greenBox: HTMLElement | null = null;
 	let content: HTMLElement | null = null;
 	// Mark `observer` as optional
-	let { observer }: { observer?: IntersectionObserver } = $props();
+	let {
+		data,
+		observer,
+		services
+	}: {
+		data?: any;
+		observer?: IntersectionObserver;
+		services?: { title: string; imageUrl: string | null }[];
+	} = $props();
 
 	onMount(() => {
 		const localObserver =

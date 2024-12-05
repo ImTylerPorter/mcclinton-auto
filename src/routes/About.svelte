@@ -9,7 +9,7 @@
 	let content: HTMLElement | null = $state(null);
 
 	// Props
-	let { observer }: { observer?: IntersectionObserver } = $props();
+	let { data, observer }: { data?: any; observer?: IntersectionObserver } = $props();
 
 	// Lifecycle hook to set up the observer
 	onMount(() => {

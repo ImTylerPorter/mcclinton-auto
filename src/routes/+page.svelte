@@ -1,24 +1,69 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import Hero from './Hero.svelte';
 	import About from './About.svelte';
 	import Contact from './Contact.svelte';
 	import Footer from './Footer.svelte';
 	import Gallery from './Gallery.svelte';
-	import Hero from './Hero.svelte';
 	import Outro from './Outro.svelte';
 	import Reviews from './Reviews.svelte';
 	import Services from './Services.svelte';
-	import type { PageData } from './$types';
 	import AdminBar from './AdminBar.svelte';
+	import type { PageData } from './$types';
+	import type { Section } from '../types';
 
 	let { data } = $props<{ data: PageData }>();
-	let { reviews, userProfile } = data;
+	let { reviews, userProfile, allSections, galleryData, servicesData } = data; // Include servicesData
+
+	// Define props for each component
+	type ComponentProps = {
+		hero: { data: Section[]; userProfile: any };
+		services: {
+			data: Section[];
+			userProfile: any;
+			services: { title: string; imageUrl: string | null }[];
+		}; // Add services here
+		about: { data: Section[]; userProfile: any };
+		testimonials: { data: Section[]; reviews: any[]; userProfile?: any };
+		gallery: { data: Section[]; userProfile: any; images: { imageUrl: string }[] };
+		outro: { data: Section[]; userProfile: any };
+		contact: { data: Section[]; userProfile: any };
+	};
+
+	// Map section names to their components
+	const componentMap: Record<
+		keyof ComponentProps,
+		| typeof Hero
+		| typeof Services
+		| typeof About
+		| typeof Reviews
+		| typeof Gallery
+		| typeof Outro
+		| typeof Contact
+	> = {
+		hero: Hero,
+		services: Services,
+		about: About,
+		testimonials: Reviews,
+		gallery: Gallery,
+		outro: Outro,
+		contact: Contact
+	};
+
+	// Order sections based on componentMap
+	let orderedSections = allSections
+		.filter((section: Section) => section.sectionName in componentMap) // Only include valid sections
+		.sort(
+			(a: Section, b: Section) =>
+				Object.keys(componentMap).indexOf(a.sectionName) -
+				Object.keys(componentMap).indexOf(b.sectionName)
+		);
 
 	let currentSection = $state<string | null>('hero');
 	let sections: HTMLElement[] = [];
 
 	onMount(() => {
-		sections = Array.from(document.querySelectorAll('[data-id]')); // Select all sections with data-id
+		sections = Array.from(document.querySelectorAll('[data-id]'));
 		const observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
@@ -30,10 +75,33 @@
 			{ threshold: 0.4 }
 		);
 
-		// Observe each section
 		sections.forEach((section) => observer.observe(section));
-		return () => observer.disconnect(); // Cleanup on destroy
+		return () => observer.disconnect();
 	});
+
+	// Get props for specific components
+	function getComponentProps(
+		section: Section,
+		reviews: any[],
+		galleryData: Record<string, { imageUrl: string }[]>,
+		servicesData: Record<string, { title: string; imageUrl: string | null }[]> // Include servicesData
+	): ComponentProps[keyof ComponentProps] {
+		switch (section.sectionName) {
+			case 'testimonials':
+				return { data: [section], reviews };
+			case 'gallery':
+				return { data: [section], userProfile, images: galleryData[section.id] || [] };
+			case 'services':
+				return { data: [section], userProfile, services: servicesData[section.id] || [] }; // Pass services
+			case 'hero':
+			case 'about':
+			case 'outro':
+			case 'contact':
+				return { data: [section], userProfile };
+			default:
+				return { data: [section], userProfile }; // Fallback
+		}
+	}
 </script>
 
 <svelte:head>
@@ -55,13 +123,13 @@
 		{userProfile}
 		{currentSection}
 		editLink={currentSection ? `/edit/${currentSection.toLowerCase()}` : '#'}
-	/>{/if}
+	/>
+{/if}
 
-<Hero {userProfile} />
-<Services />
-<About />
-<Reviews {reviews} />
-<Gallery />
-<Outro />
-<Contact />
+<!-- Render sections dynamically -->
+{#each orderedSections as section (section.id)}
+	{@const Component = componentMap[section.sectionName as keyof typeof componentMap]}
+	<Component {...getComponentProps(section, reviews, galleryData, servicesData) as any} />
+{/each}
+
 <Footer />

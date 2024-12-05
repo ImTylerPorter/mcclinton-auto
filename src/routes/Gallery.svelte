@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { register } from 'swiper/element/bundle';
 	register();
+	let { data, images } = $props();
+
 	const swiperOptions = {
 		effect: 'coverflow',
 		loop: true,
