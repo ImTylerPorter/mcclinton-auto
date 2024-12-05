@@ -4,8 +4,6 @@
 	let { message } = $props();
 	let visible = $state(false);
 
-	console.log(message, 'message');
-
 	onMount(() => {
 		if (message) {
 			visible = true;

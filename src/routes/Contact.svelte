@@ -177,6 +177,9 @@
 		text-align: center;
 	}
 
+	.messageSent {
+		text-align: center;
+	}
 	@media (max-width: 869px) {
 		.centered-green-bg {
 			width: 60%;
