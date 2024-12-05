@@ -11,6 +11,14 @@
 	// Props
 	let { data, observer }: { data?: any; observer?: IntersectionObserver } = $props();
 
+	const aboutData = data?.[0] || {
+		title: '',
+		subTitle: '',
+		content: '',
+		buttonText: null,
+		buttonLink: '#',
+		image: null
+	};
 	// Lifecycle hook to set up the observer
 	onMount(() => {
 		// Use the provided observer or create a new one
@@ -44,19 +52,14 @@
 	<div class="container">
 		<div class="grid">
 			<div class="image" bind:this={imageElement} class:visible={inView}>
-				<img src="/images/us.jpg" alt="The McClinton Auto Crew" />
+				<img src={aboutData.image || '/images/us.jpg'} alt="The McClinton Auto Crew" />
 			</div>
 			<div class="content" bind:this={content} class:visible={inView}>
-				<p class="pre-title">ABOUT</p>
-				<h3>MCCLINTON AUTO COLLISION</h3>
-				<p>
-					McClinton Auto Collision was started by owner Mark McClinton in 1997 when he decided it
-					was time to provide Albany with quality repairs and quick turnaround. Mark has been in the
-					business for over 40 years. Today Mark's son Aaron is in control of operations and has
-					continued to grow the company to be competitive and relevant in todays market. With new
-					flare mixed with significant experience McClinton Auto Collision is sure to be your best
-					bet for vehicle repair and restoration. Call us today!
-				</p>
+				<p class="pre-title">{aboutData.subTitle}</p>
+				<h3>{aboutData.title}</h3>
+				<div class="html-content">
+					{@html aboutData.content || ''}
+				</div>
 				<div class="contact">
 					<h5>Contact Us</h5>
 					<p>3960 E Commercial Way SE Albany, OR 97322</p>
