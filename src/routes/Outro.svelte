@@ -74,8 +74,7 @@
 	.container {
 		width: 1000px;
 	}
-	h3,
-	p {
+	h3 {
 		color: white;
 	}
 
@@ -86,9 +85,7 @@
 		text-transform: uppercase;
 		letter-spacing: 2px;
 	}
-	p {
-		font-size: 1.2rem;
-	}
+
 	.content {
 		width: 35em;
 		max-width: 100%;

@@ -30,6 +30,15 @@ export type Gallery = {
   imageUrl: string | null;
 }
 
+export type Settings = {
+  id: string;
+  phoneNumber: string;
+  email: string;
+  address: string;
+  facebookLink: string;
+  instagramLink: string;
+}
+
 export interface SectionState extends Omit<Section, 'image'> {
   image: File | string | null;
 }

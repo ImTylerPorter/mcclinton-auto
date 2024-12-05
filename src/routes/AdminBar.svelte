@@ -16,11 +16,11 @@
 			{:else}
 				<span>Scroll to a section to edit</span>
 			{/if}
+			<a href="/settings">Settings</a>
 			<a
 				href="/logout"
-				onclick={(e) =>
-					!confirm('Are you really sure you want to leave this digital paradise?') &&
-					e.preventDefault()}>Logout</a
+				onclick={(e) => !confirm('Are you really sure you want to sign out?') && e.preventDefault()}
+				>Logout</a
 			>
 		</div>
 	</nav>
