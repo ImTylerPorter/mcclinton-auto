@@ -2,7 +2,7 @@
 	import Phone from '../components/Phone.svelte';
 	import { slide } from 'svelte/transition';
 	import { Hamburger } from 'svelte-hamburgers';
-
+	let { settings } = $props();
 	let isNavOpen = $state(false);
 
 	function handleNavOpen() {
@@ -24,7 +24,9 @@
 			<a onclick={handleNavOpen} href="#testimonials">Testimonials</a>
 			<a onclick={handleNavOpen} href="#gallery">Gallery</a>
 			<a onclick={handleNavOpen} href="#contact">Contact Us</a>
-			<a class="phone" href="tel:5419679528"><Phone /><span>541•967•9528</span></a>
+			<a class="phone" href={`tel:${settings.phoneNumber.replace(/\D/g, '')}`}
+				><Phone /><span>{settings.phoneNumber}</span></a
+			>
 		</div>
 	{/if}
 

@@ -9,7 +9,11 @@
 	let content: HTMLElement | null = $state(null);
 
 	// Props
-	let { data, observer }: { data?: any; observer?: IntersectionObserver } = $props();
+	let {
+		data,
+		settings,
+		observer
+	}: { data?: any; settings?: any; observer?: IntersectionObserver } = $props();
 
 	const aboutData = data?.[0] || {
 		title: '',
@@ -62,9 +66,12 @@
 				</div>
 				<div class="contact">
 					<h5>Contact Us</h5>
-					<p>3960 E Commercial Way SE Albany, OR 97322</p>
-					<a href="tel:5419679528">541•967•9528</a>
-					<a href="mailto:info@mcclintonauto.com">info@mcclintonauto.com</a>
+					<a
+						href={`https://www.google.com/maps/search/${encodeURIComponent(settings.address)}`}
+						target="_BLANK">{settings.address}</a
+					>
+					<a href={`tel:${settings.phoneNumber.replace(/\D/g, '')}`}>{settings.phoneNumber}</a>
+					<a href={`mailto:${settings.email}`}>{settings.email}</a>
 				</div>
 			</div>
 		</div>
@@ -154,12 +161,7 @@
 		letter-spacing: 2px;
 		margin-bottom: 10px;
 	}
-	.contact p {
-		font-size: 1.1rem;
-		margin: 0;
-		line-height: 1.1;
-		text-transform: uppercase;
-	}
+
 	.contact a {
 		font-size: 1.1rem;
 		text-transform: uppercase;

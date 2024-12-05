@@ -6,12 +6,11 @@ import * as cheerio from 'cheerio';
 import { db} from '$lib/db'
 import { VITE_MAILGUN_API_KEY, VITE_EMAIL_TO } from '$env/static/private'; // Import server-side env variables
 import { getOrCreateUserProfile } from '$lib/auth/index.js';
-import { sectionsTable, galleryTable, servicesTable } from '$lib/db/schema';
+import { sectionsTable, galleryTable, servicesTable, globalSettingsTable } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 // Initialize Mailgun
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({ username: 'api', key: VITE_MAILGUN_API_KEY });
-
 
 type Review = {
   comment: string;
@@ -35,7 +34,15 @@ type LoadResponse = {
     extraData: unknown;
   }[];
   galleryData?: Record<string, { imageUrl: string }[]>;
-  servicesData?: Record<string, { title: string; imageUrl: string | null }[]>; // Add servicesData
+  servicesData?: Record<string, { title: string; imageUrl: string | null }[]>;
+  settings?: {
+    id: string;
+    phoneNumber: string | null;
+    email: string | null;
+    address: string | null;
+    facebookLink: string | null;
+    instagramLink: string | null;
+  };
   error?: string;
 };
 
@@ -119,9 +126,10 @@ export async function load({ locals }): Promise<LoadResponse> {
       }
     });
 
-    // Load user profile and sections
+    // Load user profile, sections and settings
     const userProfile = await getOrCreateUserProfile(locals);
     const allSections = await db.select().from(sectionsTable);
+    const settings = await db.select().from(globalSettingsTable)
 
     // Fetch gallery data
     const gallerySections = allSections.filter((section) => section.sectionName === 'gallery');
@@ -151,6 +159,7 @@ export async function load({ locals }): Promise<LoadResponse> {
       allSections,
       galleryData,
       servicesData,
+      settings: settings[0]
     };
   } catch (error) {
     console.error('Error occurred:', error);

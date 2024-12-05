@@ -2,7 +2,7 @@
 	import Logo from '../components/Logo.svelte';
 	import Nav from './Nav.svelte';
 
-	let { userProfile, data } = $props();
+	let { userProfile, data, settings } = $props();
 
 	const heroData = data?.[0] || {
 		title: '',
@@ -36,7 +36,7 @@
 		</div>
 	</div>
 	<div class="navContainer">
-		<Nav />
+		<Nav {settings} />
 	</div>
 	<div class="dark-bg"></div>
 </section>

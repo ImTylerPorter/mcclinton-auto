@@ -1,10 +1,8 @@
 import { db } from '$lib/db';
-import { galleryTable, globalSettingsTable, sectionsTable, servicesTable } from '$lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { globalSettingsTable } from '$lib/db/schema';
 import { error } from '@sveltejs/kit';
 import { getOrCreateUserProfile } from '$lib/auth';
 import type { PageServerLoad, Actions } from './$types';
-import type { Section } from '../../types';
 import { handleSettingsUpdate } from './serverHandlers';
 
 export const load: PageServerLoad = async () => {

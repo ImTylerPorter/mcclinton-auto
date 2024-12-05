@@ -13,17 +13,17 @@
 	import type { Section } from '../types';
 
 	let { data } = $props<{ data: PageData }>();
-	let { reviews, userProfile, allSections, galleryData, servicesData } = data; // Include servicesData
+	let { reviews, userProfile, allSections, galleryData, servicesData, settings } = data;
 
 	// Define props for each component
 	type ComponentProps = {
-		hero: { data: Section[]; userProfile: any };
+		hero: { data: Section[]; userProfile: any; settings: any };
 		services: {
 			data: Section[];
 			userProfile: any;
 			services: { title: string; imageUrl: string | null }[];
-		}; // Add services here
-		about: { data: Section[]; userProfile: any };
+		};
+		about: { data: Section[]; userProfile: any; settings: any };
 		testimonials: { data: Section[]; reviews: any[]; userProfile?: any };
 		gallery: { data: Section[]; userProfile: any; images: { imageUrl: string }[] };
 		outro: { data: Section[]; userProfile: any };
@@ -84,7 +84,8 @@
 		section: Section,
 		reviews: any[],
 		galleryData: Record<string, { imageUrl: string }[]>,
-		servicesData: Record<string, { title: string; imageUrl: string | null }[]> // Include servicesData
+		servicesData: Record<string, { title: string; imageUrl: string | null }[]>,
+		settings: any // Include settings
 	): ComponentProps[keyof ComponentProps] {
 		switch (section.sectionName) {
 			case 'testimonials':
@@ -92,9 +93,10 @@
 			case 'gallery':
 				return { data: [section], userProfile, images: galleryData[section.id] || [] };
 			case 'services':
-				return { data: [section], userProfile, services: servicesData[section.id] || [] }; // Pass services
+				return { data: [section], userProfile, services: servicesData[section.id] || [] };
 			case 'hero':
 			case 'about':
+				return { data: [section], userProfile, settings }; // Pass settings here
 			case 'outro':
 			case 'contact':
 				return { data: [section], userProfile };
@@ -129,7 +131,7 @@
 <!-- Render sections dynamically -->
 {#each orderedSections as section (section.id)}
 	{@const Component = componentMap[section.sectionName as keyof typeof componentMap]}
-	<Component {...getComponentProps(section, reviews, galleryData, servicesData) as any} />
+	<Component {...getComponentProps(section, reviews, galleryData, servicesData, settings) as any} />
 {/each}
 
-<Footer />
+<Footer {settings} />
