@@ -12,7 +12,7 @@ export const sectionConfigs: Record<string, SectionConfig> = {
     showTagline: false,
     showContent: true,
     showButton: true,
-    showImage: false,
+    showImage: true,
   },
   services: {
     showSubTitle: true,
