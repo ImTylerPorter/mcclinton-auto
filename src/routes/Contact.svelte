@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	let { data } = $props();
+
 	// States for form data
 	let name = $state('');
 	let email = $state('');
 	let phone = $state('');
 	let message = $state('');
 	let messageSent = $state(false);
+
+	const contactData = data?.[0] || {
+		title: '',
+		content: ''
+	};
 
 	// Form error with an initial null value
 	let formError = $state<string | null>(null);
@@ -51,8 +57,10 @@
 	<div class="container">
 		<div class="contactBox">
 			{#if !messageSent}
-				<h3>Contact Us</h3>
-				<p>Send us a messsage. We will get back to you as soon as possible!</p>
+				<h3>{contactData.title}</h3>
+				<div class="html-content-dark center">
+					{@html contactData.content}
+				</div>
 				<form onsubmit={submitForm}>
 					{#if formError}
 						<p style="color:red;">{formError}</p>
@@ -107,8 +115,7 @@
 		padding: 50px;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 	}
-	h3,
-	p {
+	h3 {
 		text-align: center;
 	}
 	h3 {
@@ -118,9 +125,7 @@
 		text-transform: uppercase;
 		margin: 0;
 	}
-	p {
-		font-size: 1.2rem;
-	}
+
 	.fieldGroup {
 		display: flex;
 		gap: 20px;
@@ -166,6 +171,10 @@
 		border: none;
 		display: block;
 		padding: 14px 48px;
+	}
+
+	:global(.center) {
+		text-align: center;
 	}
 
 	@media (max-width: 869px) {
