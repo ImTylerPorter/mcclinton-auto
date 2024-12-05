@@ -45,7 +45,7 @@ export const sectionConfigs: Record<string, SectionConfig> = {
   outro: {
     showSubTitle: false,
     showTagline: false,
-    showContent: false,
+    showContent: true,
     showButton: true,
     showImage: false,
   },
