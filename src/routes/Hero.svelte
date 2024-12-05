@@ -1,19 +1,37 @@
 <script lang="ts">
 	import Logo from '../components/Logo.svelte';
 	import Nav from './Nav.svelte';
+
 	let { userProfile, data } = $props();
+
+	const heroData = data?.[0] || {
+		title: '',
+		content: '',
+		buttonText: null,
+		buttonLink: '#',
+		image: null
+	};
 </script>
 
-<section id="hero" data-id="Hero" class:signedIn={userProfile}>
+<section
+	id="hero"
+	data-id="Hero"
+	class:signedIn={userProfile}
+	style="background-image: url({heroData.image || '/images/default-hero.jpg'})"
+>
 	<div class="container">
 		<div class="contentContainer">
 			<div class="logo">
 				<Logo />
 			</div>
 			<div class="content">
-				<h1>AUTO COLLISION SPECIALIST AT COMPETITIVE PRICING!</h1>
-				<p>Providing the best possible service for your vehicle.</p>
-				<a href="#contact" class="button">Contact Us!</a>
+				<h1>{heroData.title}</h1>
+				<div class="html-content">
+					{@html heroData.content || ''}
+				</div>
+				{#if heroData.buttonText}
+					<a href={heroData.buttonLink} class="button">{heroData.buttonText}</a>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -29,10 +47,14 @@
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-position: center;
-		background-image: url('/images/hero-bg.jpg');
 		min-height: 700px;
 		padding: 24px 0;
 	}
+	.container {
+		position: relative;
+		z-index: 2;
+	}
+
 	.contentContainer {
 		max-width: 100%;
 		width: 340px;
@@ -40,36 +62,36 @@
 		flex-direction: column;
 		gap: 30px;
 	}
+
 	.logo {
 		width: 90%;
 		margin: 0 auto;
 		display: block;
 	}
+
 	.content {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 	}
+
 	h1 {
 		color: white;
 		font-size: 2rem;
 		margin-top: 0;
 		margin-bottom: 10px;
 	}
-	p {
+
+	:global(.html-content p) {
 		color: white;
-		font-weight: bold;
-		font-style: italic;
 		margin: 0;
 	}
+
 	.button {
 		margin: 30px auto 0;
 		display: block;
 	}
-	.container {
-		position: relative;
-		z-index: 2;
-	}
+
 	.dark-bg {
 		position: absolute;
 		top: 0;
