@@ -1,25 +1,30 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	let inView = $state(false);
-	let services: HTMLElement | null = null; // Type-safe DOM element reference
+
+	let inView = $state(false); // Tracks whether services are in view
+	let servicesContainer: HTMLElement | null = null; // DOM reference for the services container
+
+	let { services: allServices } = $props<{
+		services?: { title: string; imageUrl: string | null }[];
+	}>();
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
-					inView = true; // Trigger fly animation when in view
+					inView = true; // Trigger animations when in view
 				}
 			});
 		});
 
-		// Observe the image element when it is available
-		if (services) {
-			observer.observe(services);
+		// Observe the container for visibility
+		if (servicesContainer) {
+			observer.observe(servicesContainer);
 		}
 
-		// Clean up the observer when component is destroyed
+		// Cleanup observer on unmount
 		return () => {
-			if (services) observer.unobserve(services);
+			if (servicesContainer) observer.unobserve(servicesContainer);
 		};
 	});
 </script>
@@ -27,52 +32,23 @@
 <div class="servicesList">
 	<div class="container">
 		<h3>Our <span>Services</span></h3>
-		<div class="services" bind:this={services} class:visible={inView}>
-			<div class="box">
-				<img src="images/collision.jpg" alt="Collision Repair" />
-				<div class="content">
-					<span>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-							><path
-								d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
-							/></svg
-						>
-					</span>
-					<h4>Collision Repair</h4>
+		<div class="services" bind:this={servicesContainer} class:visible={inView}>
+			{#each allServices || [] as service (service.title)}
+				<div class="box">
+					<img src={service.imageUrl || 'images/default-service.jpg'} alt={service.title} />
+					<div class="content">
+						<span>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+								<path
+									d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+								/>
+							</svg>
+						</span>
+						<h4>{service.title}</h4>
+					</div>
+					<div class="dark-bg"></div>
 				</div>
-				<div class="dark-bg"></div>
-			</div>
-
-			<div class="box">
-				<img src="images/paint.jpg" alt="Auto Body Paint" />
-				<div class="content">
-					<span>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-							><path
-								d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
-							/></svg
-						>
-					</span>
-					<h4>Auto Body Painting</h4>
-				</div>
-				<div class="dark-bg"></div>
-			</div>
-
-			<div class="box">
-				<img src="images/dent.jpg" alt="Auto Body Dent Repair" />
-
-				<div class="content">
-					<span>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-							><path
-								d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
-							/></svg
-						>
-					</span>
-					<h4>Dent Repair</h4>
-				</div>
-				<div class="dark-bg"></div>
-			</div>
+			{/each}
 		</div>
 	</div>
 </div>
@@ -98,18 +74,21 @@
 	.box {
 		position: relative;
 		opacity: 0;
-		transition: opacity 800ms ease;
-		transition-delay: 200ms;
+		transition:
+			opacity 800ms ease,
+			transform 800ms ease;
+		transform: translateY(20px);
 	}
 	.box:nth-child(2) {
-		transition-delay: 400ms;
+		transition-delay: 200ms;
 	}
 	.box:nth-child(3) {
-		transition-delay: 600ms;
+		transition-delay: 400ms;
 	}
 
 	.services.visible .box {
 		opacity: 1;
+		transform: translateY(0);
 	}
 
 	.box img {

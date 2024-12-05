@@ -1,47 +1,54 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import ServicesList from './ServicesList.svelte';
+
+	// Destructure props
+	let { data, observer, services } = $props<{
+		data?: any[];
+		observer?: IntersectionObserver;
+		services?: { title: string; imageUrl: string | null }[];
+	}>();
+
+	const servicesData = data?.[0] || {
+		title: '',
+		subTitle: '',
+		tagline: '',
+		content: '',
+		buttonText: null,
+		buttonLink: '#',
+		image: null
+	};
+
+	// Intersection observer state
 	let inView = $state(false);
-	// Explicitly type as HTMLElement or null
+
+	// Element references
 	let imageElement: HTMLElement | null = null;
 	let greenBox: HTMLElement | null = null;
 	let content: HTMLElement | null = null;
-	// Mark `observer` as optional
-	let {
-		data,
-		observer,
-		services
-	}: {
-		data?: any;
-		observer?: IntersectionObserver;
-		services?: { title: string; imageUrl: string | null }[];
-	} = $props();
 
+	// Intersection observer logic
 	onMount(() => {
 		const localObserver =
 			observer ||
 			new IntersectionObserver((entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						inView = true; // Trigger fly animation when in view
+						inView = true;
 					}
 				});
 			});
 
-		if (imageElement) {
-			localObserver.observe(imageElement);
-		}
-		if (greenBox) {
-			localObserver.observe(greenBox);
-		}
-		if (content) {
-			localObserver.observe(content);
-		}
+		// Observe elements
+		[imageElement, greenBox, content].forEach((element) => {
+			if (element) localObserver.observe(element);
+		});
 
 		return () => {
-			if (imageElement) localObserver.unobserve(imageElement);
-			if (greenBox) localObserver.unobserve(greenBox);
-			if (content) localObserver.unobserve(content);
+			// Cleanup
+			[imageElement, greenBox, content].forEach((element) => {
+				if (element) localObserver.unobserve(element);
+			});
 		};
 	});
 </script>
@@ -49,31 +56,35 @@
 <section id="services" data-id="Services">
 	<div class="container">
 		<div class="introGrid">
+			<!-- Content Section -->
 			<div class="content" bind:this={content} class:visible={inView}>
-				<p class="pre-title">WELCOME TO</p>
-				<h3>MCCLINTON AUTO COLLISION</h3>
-				<h4>Auto & Body Repair Specialist</h4>
-				<p>
-					McClinton Auto Collision is your late model, collision repair specialist. We repair all
-					makes and models for all insurance companies and those paying out of pocket! If you've
-					been in an auto accident, call us today!
-				</p>
-				<a href="#contact" class="button">Contact Us</a>
+				<p class="pre-title">{servicesData.subTitle}</p>
+				<h3>{servicesData.title}</h3>
+				<h4>{servicesData.tagline}</h4>
+				<div class="html-content-dark">
+					{@html servicesData.content || ''}
+				</div>
+				{#if servicesData.buttonText}
+					<a href={servicesData.buttonLink} class="button">{servicesData.buttonText}</a>
+				{/if}
 			</div>
+
 			<div>
-				<!-- Always render the div, fly transition happens when inView becomes true -->
 				<div bind:this={imageElement} class="image" class:visible={inView}>
-					<img src="images/building.jpg" alt="McClinton Auto Collision Building" />
+					<img src={servicesData.image || 'images/building.jpg'} alt="Service" />
 				</div>
 			</div>
 
+			<!-- Decorative Green Box -->
 			<div bind:this={greenBox} class="greenBox" class:visible={inView}></div>
 		</div>
-		<ServicesList />
+
+		<ServicesList {services} />
 	</div>
 </section>
 
 <style>
+	/* General Section Styles */
 	#services {
 		padding: 50px 0;
 		overflow: hidden;
@@ -88,38 +99,18 @@
 		grid-template-columns: 1fr 1fr;
 		gap: 50px;
 		align-items: center;
-		position: relative;
 		padding: 100px 0;
 	}
 
+	/* Content Styles */
 	.content {
 		transform: translateX(-60%);
 		opacity: 0;
 		transition: all 800ms ease;
 	}
-
 	.content.visible {
 		transform: translateX(0);
 		opacity: 1;
-	}
-	.greenBox {
-		position: absolute;
-		top: 0;
-		right: -75px;
-		bottom: 0;
-		background: var(--green);
-		width: 400px;
-		z-index: -1;
-		opacity: 0;
-		transform: translate(-45px, 100px);
-		transition:
-			opacity 0.6s ease-out,
-			transform 0.8s ease-out;
-	}
-
-	.greenBox.visible {
-		opacity: 1;
-		transform: translate(0);
 	}
 	p.pre-title {
 		font-weight: bold;
@@ -137,9 +128,11 @@
 		font-size: 1.2rem;
 		margin-top: 0;
 	}
-	p {
+	:global(.html-content-dark p) {
 		font-size: 1.1rem;
 	}
+
+	/* Button Styles */
 	.button {
 		margin-top: 20px;
 		display: inline-block;
@@ -148,6 +141,8 @@
 		color: #fff;
 		text-decoration: none;
 	}
+
+	/* Image Styles */
 	.image {
 		box-shadow: 2px 3px 20px rgba(0, 0, 0, 0.6);
 		opacity: 0;
@@ -156,7 +151,6 @@
 			opacity 0.6s ease-out,
 			transform 0.6s ease-out;
 	}
-
 	.image.visible {
 		opacity: 1;
 		transform: translateY(0);
@@ -166,31 +160,48 @@
 		display: block;
 	}
 
+	/* Green Box Styles */
+	.greenBox {
+		position: absolute;
+		top: 0;
+		right: -75px;
+		bottom: 0;
+		background: var(--green);
+		width: 400px;
+		z-index: -1;
+		opacity: 0;
+		transform: translate(-45px, 100px);
+		transition:
+			opacity 0.6s ease-out,
+			transform 0.8s ease-out;
+	}
+	.greenBox.visible {
+		opacity: 1;
+		transform: translate(0);
+	}
+
+	/* Responsive Design */
 	@media (max-width: 869px) {
 		.introGrid {
 			grid-template-columns: 1fr;
 			gap: 75px;
 		}
-
 		.greenBox {
 			top: 310px;
 		}
 	}
-
 	@media (max-width: 580px) {
 		.greenBox {
 			width: 300px;
 			top: 330px;
 		}
 	}
-
 	@media (max-width: 440px) {
 		.greenBox {
 			width: 230px;
 			top: 360px;
 		}
 	}
-
 	@media (max-width: 400px) {
 		.greenBox {
 			top: 430px;
