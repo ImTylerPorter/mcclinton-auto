@@ -44,6 +44,7 @@ type LoadResponse = {
     instagramLink: string | null;
   };
   error?: string;
+  message?: string | null;
 };
 
 export const actions = {
@@ -102,12 +103,14 @@ export const actions = {
   }
 };
 
-export async function load({ locals }): Promise<LoadResponse> {
+export async function load({ locals, url }): Promise<LoadResponse> {
   try {
 
-    const url =
+    const message = url.searchParams.get('message') || null;
+
+    const apiUrl =
       'https://www.carwise.com/auto-body-shops/shopPlugin?rfid=555006&re=1&type=f&theme=&size=m&zip=&demo=f&ap=false';
-    const { data } = await axios.get<string>(url); // Specify the type of response data
+    const { data } = await axios.get<string>(apiUrl); // Specify the type of response data
 
     const $ = cheerio.load(data);
     let reviews: Review[] = []; // Initialize reviews with the defined type
@@ -159,7 +162,8 @@ export async function load({ locals }): Promise<LoadResponse> {
       allSections,
       galleryData,
       servicesData,
-      settings: settings[0]
+      settings: settings[0],
+      message
     };
   } catch (error) {
     console.error('Error occurred:', error);

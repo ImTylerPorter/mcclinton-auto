@@ -11,9 +11,10 @@
 	import AdminBar from './AdminBar.svelte';
 	import type { PageData } from './$types';
 	import type { Section } from '../types';
+	import Flash from '../components/Flash.svelte';
 
 	let { data } = $props<{ data: PageData }>();
-	let { reviews, userProfile, allSections, galleryData, servicesData, settings } = data;
+	let { reviews, userProfile, allSections, galleryData, servicesData, settings, message } = data;
 
 	// Define props for each component
 	type ComponentProps = {
@@ -64,6 +65,8 @@
 
 	onMount(() => {
 		sections = Array.from(document.querySelectorAll('[data-id]'));
+		const params = new URLSearchParams(window.location.search);
+
 		const observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
@@ -105,6 +108,8 @@
 		}
 	}
 </script>
+
+<Flash {message} />
 
 <svelte:head>
 	<title>McClinton Auto Collision - Albany, Oregon</title>
