@@ -97,6 +97,28 @@ export const actions = {
 
 export async function load({ locals }): Promise<LoadResponse> {
   try {
+
+    const url =
+      'https://www.carwise.com/auto-body-shops/shopPlugin?rfid=555006&re=1&type=f&theme=&size=m&zip=&demo=f&ap=false';
+    const { data } = await axios.get<string>(url); // Specify the type of response data
+
+    const $ = cheerio.load(data);
+    let reviews: Review[] = []; // Initialize reviews with the defined type
+
+    $('#reviewList li.reviewListItem').each((i, elem) => {
+      const comment = $(elem).find('.comment').text().trim();
+      const customerName = $(elem).find('.customerName').text().trim();
+      const carMake = $(elem).find('.carMake').text().trim();
+
+      if (comment !== '') {
+        reviews.push({
+          comment,
+          customerName,
+          carMake,
+        });
+      }
+    });
+
     // Load user profile and sections
     const userProfile = await getOrCreateUserProfile(locals);
     const allSections = await db.select().from(sectionsTable);
@@ -124,10 +146,11 @@ export async function load({ locals }): Promise<LoadResponse> {
     }
 
     return {
+      reviews,
       userProfile,
       allSections,
       galleryData,
-      servicesData, // Include servicesData
+      servicesData,
     };
   } catch (error) {
     console.error('Error occurred:', error);
