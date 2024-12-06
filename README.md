@@ -1,4 +1,11 @@
-# create-svelte
+
+
+#LIVE WEBSITE: [mcclintonauto.com](https://mcclintonauto.com)
+
+This is a SvelteKit project, with a very opinionated CMS that makes use of Supabase.
+
+
+## create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
 
