@@ -1,66 +1,77 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
+
+	// State variables
 	let inView = $state(false);
-	/**
-	 * @type {Element}
-	 */
-	let imageElement = $state();
 
-	/**
-	 * @type {Element}
-	 */
-	let content = $state();
+	// References to DOM elements
+	let imageElement: HTMLElement | null = $state(null);
+	let content: HTMLElement | null = $state(null);
 
-	let { observer } = $props();
+	// Props
+	let {
+		data,
+		settings,
+		observer
+	}: { data?: any; settings?: any; observer?: IntersectionObserver } = $props();
 
+	const aboutData = data?.[0] || {
+		title: '',
+		subTitle: '',
+		content: '',
+		buttonText: null,
+		buttonLink: '#',
+		image: null
+	};
+	// Lifecycle hook to set up the observer
 	onMount(() => {
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					inView = true; // Trigger fly animation when in view
-				}
+		// Use the provided observer or create a new one
+		const localObserver =
+			observer ||
+			new IntersectionObserver((entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						inView = true; // Trigger fly animation when in view
+					}
+				});
 			});
-		});
 
-		// Observe the element when it is available
+		// Observe the elements
 		if (imageElement) {
-			observer.observe(imageElement);
+			localObserver.observe(imageElement);
 		}
-
 		if (content) {
-			observer.observe(content);
+			localObserver.observe(content);
 		}
 
-		// Clean up the observer when component is destroyed
+		// Cleanup on component destroy
 		return () => {
-			if (imageElement) observer.unobserve(imageElement);
-			if (content) observer.unobserve(content);
+			if (imageElement) localObserver.unobserve(imageElement);
+			if (content) localObserver.unobserve(content);
 		};
 	});
 </script>
 
-<section id="about">
+<section id="about" data-id="About">
 	<div class="container">
 		<div class="grid">
 			<div class="image" bind:this={imageElement} class:visible={inView}>
-				<img src="/images/us.jpg" alt="The McClinton Auto Crew" />
+				<img src={aboutData.image || '/images/us.jpg'} alt="The McClinton Auto Crew" />
 			</div>
 			<div class="content" bind:this={content} class:visible={inView}>
-				<p class="pre-title">ABOUT</p>
-				<h3>MCCLINTON AUTO COLLISION</h3>
-				<p>
-					McClinton Auto Collision was started by owner Mark McClinton in 1997 when he decided it
-					was time to provide Albany with quality repairs and quick turnaround. Mark has been in the
-					business for over 40 years. Today Mark's son Aaron is in control of operations and has
-					continued to grow the company to be competitive and relevant in todays market. With new
-					flare mixed with significant experience McClinton Auto Collision is sure to be your best
-					bet for vehicle repair and restoration. Call us today!
-				</p>
+				<p class="pre-title">{aboutData.subTitle}</p>
+				<h3>{aboutData.title}</h3>
+				<div class="html-content">
+					{@html aboutData.content || ''}
+				</div>
 				<div class="contact">
 					<h5>Contact Us</h5>
-					<p>3960 E Commercial Way SE Albany, OR 97322</p>
-					<a href="tel:5419679528">541•967•9528</a>
-					<a href="mailto:info@mcclintonauto.com">info@mcclintonauto.com</a>
+					<a
+						href={`https://www.google.com/maps/search/${encodeURIComponent(settings.address)}`}
+						target="_BLANK">{settings.address}</a
+					>
+					<a href={`tel:${settings.phoneNumber.replace(/\D/g, '')}`}>{settings.phoneNumber}</a>
+					<a href={`mailto:${settings.email}`}>{settings.email}</a>
 				</div>
 			</div>
 		</div>
@@ -150,12 +161,7 @@
 		letter-spacing: 2px;
 		margin-bottom: 10px;
 	}
-	.contact p {
-		font-size: 1.1rem;
-		margin: 0;
-		line-height: 1.1;
-		text-transform: uppercase;
-	}
+
 	.contact a {
 		font-size: 1.1rem;
 		text-transform: uppercase;

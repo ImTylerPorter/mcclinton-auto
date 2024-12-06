@@ -1,54 +1,66 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
+	let { data } = $props();
+
+	// States for form data
 	let name = $state('');
 	let email = $state('');
 	let phone = $state('');
 	let message = $state('');
 	let messageSent = $state(false);
-	/**
-	 * @type {string | null}
-	 */
-	let formError = $state(null);
 
-	const submitForm = async (event) => {
+	const contactData = data?.[0] || {
+		title: '',
+		content: ''
+	};
+
+	// Form error with an initial null value
+	let formError = $state<string | null>(null);
+
+	// Submit function with proper TypeScript types
+	const submitForm = async (event: Event): Promise<void> => {
 		event.preventDefault();
+
+		// Create FormData
 		const formData = new FormData();
 		formData.append('name', name);
 		formData.append('email', email);
 		formData.append('phone', phone);
 		formData.append('message', message);
 
-		const response = await fetch($page.url.pathname, {
-			method: 'POST',
-			body: formData
-		});
+		try {
+			const response = await fetch($page.url.pathname, {
+				method: 'POST',
+				body: formData
+			});
 
-		if (!response.ok) {
-			const errorData = await response.json();
-			if (errorData && errorData.error && errorData.error.message) {
-				formError = errorData.error.message;
-			} else {
-				formError = 'An unexpected error occurred';
+			if (!response.ok) {
+				const errorData = await response.json();
+				formError = errorData?.error?.message || 'An unexpected error occurred';
+				return;
 			}
-			return;
-		}
 
-		const data = await response.json();
-		if (data.status === 200) {
-			formError = null;
-			messageSent = true;
-		} else {
-			formError = 'An error occurred';
+			const data = await response.json();
+			if (data.status === 200) {
+				formError = null;
+				messageSent = true;
+			} else {
+				formError = 'An error occurred';
+			}
+		} catch (error) {
+			formError = 'An unexpected error occurred';
 		}
 	};
 </script>
 
-<section id="contact">
+<section id="contact" data-id="Contact">
 	<div class="container">
 		<div class="contactBox">
 			{#if !messageSent}
-				<h3>Contact Us</h3>
-				<p>Send us a messsage. We will get back to you as soon as possible!</p>
+				<h3>{contactData.title}</h3>
+				<div class="html-content-dark center">
+					{@html contactData.content}
+				</div>
 				<form onsubmit={submitForm}>
 					{#if formError}
 						<p style="color:red;">{formError}</p>
@@ -78,7 +90,7 @@
 				</form>
 			{:else}
 				<div class="messageSent">
-					<h3>Thank you for your message, {name.split(' ')[0]}!</h3>
+					<h3>Thank you for your message, {name ? name.split(' ')[0] : 'valued customer'}!</h3>
 					<p>We look forward to speaking and will reach out soon!</p>
 				</div>
 			{/if}
@@ -103,8 +115,7 @@
 		padding: 50px;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 	}
-	h3,
-	p {
+	h3 {
 		text-align: center;
 	}
 	h3 {
@@ -114,9 +125,7 @@
 		text-transform: uppercase;
 		margin: 0;
 	}
-	p {
-		font-size: 1.2rem;
-	}
+
 	.fieldGroup {
 		display: flex;
 		gap: 20px;
@@ -164,6 +173,13 @@
 		padding: 14px 48px;
 	}
 
+	:global(.center) {
+		text-align: center;
+	}
+
+	.messageSent {
+		text-align: center;
+	}
 	@media (max-width: 869px) {
 		.centered-green-bg {
 			width: 60%;

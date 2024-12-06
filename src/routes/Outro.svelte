@@ -1,48 +1,63 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
+
+	// State variable to track visibility
 	let inView = $state(false);
-	/**
-	 * @type {Element}
-	 */
-	let content = $state();
+
+	// Reference to the DOM element
+	let content: HTMLElement | null = $state(null);
+
+	// Dynamic year calculations
 	const currentYear = new Date().getFullYear();
 	const yearStarted = 1997;
 	const yearsInBusiness = currentYear - yearStarted;
 	const earliestWorkedOn = currentYear - 15;
 
-	let { observer } = $props();
+	// Props for optional observer
+	let { data, observer }: { data?: any; observer?: IntersectionObserver } = $props();
 
+	const outroData = data?.[0] || {
+		title: '',
+		content: '',
+		buttonText: null,
+		buttonLink: '#'
+	};
+
+	// Lifecycle hook
 	onMount(() => {
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					inView = true; // Trigger fly animation when in view
-				}
+		// Use provided observer or create a new one
+		const localObserver =
+			observer ||
+			new IntersectionObserver((entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						inView = true; // Trigger animation when in view
+					}
+				});
 			});
-		});
 
+		// Observe the content element
 		if (content) {
-			observer.observe(content);
+			localObserver.observe(content);
 		}
 
-		// Clean up the observer when component is destroyed
+		// Cleanup on component destroy
 		return () => {
-			if (content) observer.unobserve(content);
+			if (content) localObserver.unobserve(content);
 		};
 	});
 </script>
 
-<section id="outro">
+<section id="outro" data-id="Outro">
 	<div class="container">
 		<div class="content" bind:this={content} class:visible={inView}>
-			<h3>{yearsInBusiness} Years in Business</h3>
-			<p>
-				We are your local, family owned collsion repair facility. We offer complete, high-quality
-				repairs on all {earliestWorkedOn} and newer vehicles, for all insurance companies and those paying
-				out of pocket! We offer the latest auto body technology. You always have a choice when choosing
-				your repair shop! Call us today for more information about having your damanged vehicle repaired.
-			</p>
-			<a href="tel:5419679528" class="button">Contact Us: <span>541•967•9528</span></a>
+			<h3>{yearsInBusiness} {outroData.title}</h3>
+			<div class="html-content">
+				{@html outroData.content}
+			</div>
+			{#if outroData.buttonText}
+				<a href={outroData.buttonLink} class="button">{outroData.buttonText}</a>
+			{/if}
 		</div>
 	</div>
 </section>
@@ -59,8 +74,7 @@
 	.container {
 		width: 1000px;
 	}
-	h3,
-	p {
+	h3 {
 		color: white;
 	}
 
@@ -71,9 +85,7 @@
 		text-transform: uppercase;
 		letter-spacing: 2px;
 	}
-	p {
-		font-size: 1.2rem;
-	}
+
 	.content {
 		width: 35em;
 		max-width: 100%;

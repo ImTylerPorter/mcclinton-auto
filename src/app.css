@@ -15,12 +15,17 @@
 	--black: #1d1d1d;
 	--green: #147f40;
 	--tan: #c18e52;
+	--green-light: #a8d5ba;
+	--tan-light: #f3d5b5;
+	--background-light: #f9f9f9;
+
+
 	font-family: var(--font-body);
 	color: var(--color-text);
 }
 
 * {
-	transition: all 300ms ease;
+	transition: all 300ms ease-in;
 }
 
 html {
@@ -125,6 +130,7 @@ button:focus:not(:focus-visible) {
 	margin: 0 auto;
 }
 
+button,
 .button {
 	background: green;
 	color: white;
@@ -134,6 +140,16 @@ button:focus:not(:focus-visible) {
 	border-radius: 25px;
 }
 
+button:hover,
 .button:hover {
 	background: var(--tan);
+}
+
+.error {
+	color: firebrick;
+	text-align: center;
+}
+
+.ql-snow {
+	border-color: var(--green) !important;
 }

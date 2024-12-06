@@ -1,7 +1,14 @@
-<script>
+<script lang="ts">
 	import { register } from 'swiper/element/bundle';
 	register();
 
+	let { data, images = [] } = $props();
+
+	const galleryData = data?.[0] || {
+		title: 'Our Gallery'
+	};
+
+	// Swiper configuration options
 	const swiperOptions = {
 		effect: 'coverflow',
 		loop: true,
@@ -20,20 +27,18 @@
 	};
 </script>
 
-<section id="gallery">
+<section id="gallery" data-id="Gallery">
 	<div class="container">
-		<h3>Our Gallery</h3>
+		<h3>{galleryData.title}</h3>
+
 		<div class="gallery">
 			<swiper-container {...swiperOptions}>
-				<swiper-slide>
-					<img src="images/one.jpg" alt="Wrecked Car" />
-				</swiper-slide>
-				<swiper-slide>
-					<img src="images/two.jpg" alt="Wrecked Car" />
-				</swiper-slide>
-				<swiper-slide>
-					<img src="images/three.jpg" alt="Wrecked Car" />
-				</swiper-slide>
+				<!-- Dynamically render slides from images -->
+				{#each images as image (image.imageUrl)}
+					<swiper-slide>
+						<img src={image.imageUrl} alt="Gallery" />
+					</swiper-slide>
+				{/each}
 			</swiper-container>
 		</div>
 	</div>
@@ -45,29 +50,37 @@
 		padding: 75px 0;
 		position: relative;
 		overflow: hidden;
+		background-color: var(--dark-gray);
 	}
+
 	.container {
 		position: relative;
 		z-index: 3;
+		text-align: center;
 	}
+
 	h3 {
 		color: white;
-		text-align: center;
 		font-size: 2.5rem;
-		margin-top: 0;
+		margin: 0 0 40px;
 		text-transform: uppercase;
 		letter-spacing: 2px;
 	}
+
 	swiper-slide {
-		width: 35em;
+		width: 35em !important;
 		height: auto;
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+		border-radius: 10px;
+		overflow: hidden;
 	}
 
 	swiper-slide img {
 		width: 100%;
 		display: block;
+		object-fit: cover;
 	}
+
 	.centered-green-bg {
 		background: var(--green);
 		position: absolute;
@@ -76,13 +89,16 @@
 		transform: translateX(-50%);
 		width: 30%;
 		height: 100vh;
+		z-index: 1;
 	}
 
+	/* Responsive Adjustments */
 	@media (max-width: 869px) {
 		.centered-green-bg {
 			width: 60%;
 		}
 	}
+
 	@media (max-width: 480px) {
 		.centered-green-bg {
 			width: 80%;
