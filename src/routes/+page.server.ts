@@ -1,16 +1,14 @@
-import Mailgun from 'mailgun.js';
-import formData from 'form-data'; // Make sure to import form-data
+import { Resend } from 'resend';
 import { error } from '@sveltejs/kit';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { db} from '$lib/db'
-import { VITE_MAILGUN_API_KEY, VITE_EMAIL_TO } from '$env/static/private'; // Import server-side env variables
+import { VITE_RESEND_API_KEY, VITE_EMAIL_TO, VITE_EMAIL_FROM } from '$env/static/private'; // Import server-side env variables
 import { getOrCreateUserProfile } from '$lib/auth/index.js';
 import { sectionsTable, galleryTable, servicesTable, globalSettingsTable } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
-// Initialize Mailgun
-const mailgun = new Mailgun(formData);
-const mg = mailgun.client({ username: 'api', key: VITE_MAILGUN_API_KEY });
+// Initialize Resend
+const resend = new Resend(VITE_RESEND_API_KEY);
 
 type Review = {
   comment: string;
@@ -81,19 +79,14 @@ export const actions = {
     }
 
     try {
-      // Prepare email data
-      const mailgunData = {
-        from: `${name} <${email}>`,
-        to: VITE_EMAIL_TO, // Use the server-side env variable for the recipient
+      // Send the email via Resend
+      await resend.emails.send({
+        from: VITE_EMAIL_FROM, // Must be a verified domain in Resend
+        to: VITE_EMAIL_TO,
         subject: 'New Contact Form Submission',
-        text: `From: ${name} (${email})\nPhone: ${phone}\n\n${message}`
-      };
-
-      // Send the email via Mailgun
-      await mg.messages.create(
-        'sandboxc6fe94f30eb741b4af19a6e43da69e4a.mailgun.org',
-        mailgunData
-      );
+        text: `From: ${name} (${email})\nPhone: ${phone}\n\n${message}`,
+        replyTo: email as string
+      });
 
       return { success: true, message: 'Message sent successfully.' };
     } catch (err) {
