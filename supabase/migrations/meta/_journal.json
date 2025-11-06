@@ -15,6 +15,13 @@
       "when": 1733166893553,
       "tag": "0001_bent_thunderbird",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1733619976933,
+      "tag": "0002_tough_giant_man",
+      "breakpoints": true
     }
   ]
 }

@@ -8,7 +8,7 @@ const supabase: Handle = async ({ event, resolve }) => {
   /**
    * Creates a Supabase client specific to this server request.
    *
-   * The Supabase client gets the Auth token from the request cookies.
+   * The Supabase client geats the Auth token from the request cookies.
    */
   event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
     cookies: {

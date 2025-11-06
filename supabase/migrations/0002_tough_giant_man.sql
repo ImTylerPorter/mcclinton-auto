@@ -1,0 +1,1 @@
+ALTER TABLE "sections" ADD CONSTRAINT "sections_section_name_unique" UNIQUE("section_name");
