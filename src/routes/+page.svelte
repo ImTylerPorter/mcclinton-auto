@@ -14,7 +14,7 @@
 	import Flash from '../components/Flash.svelte';
 
 	let { data } = $props<{ data: PageData }>();
-	let { reviews, userProfile, allSections, galleryData, servicesData, settings, message } = data;
+	let { reviews = [], userProfile, allSections = [], galleryData = {}, servicesData = {}, settings, message } = data;
 
 	// Define props for each component
 	type ComponentProps = {
@@ -52,7 +52,7 @@
 	};
 
 	// Order sections based on componentMap
-	let orderedSections = allSections
+	let orderedSections = (allSections || [])
 		.filter((section: Section) => section.sectionName in componentMap) // Only include valid sections
 		.sort(
 			(a: Section, b: Section) =>

@@ -97,16 +97,55 @@ export const actions = {
 };
 
 export async function load({ locals, url }): Promise<LoadResponse> {
+  const message = url.searchParams.get('message') || null;
+
+  // Load user profile, sections and settings first (these should always work)
+  const userProfile = await getOrCreateUserProfile(locals);
+  const allSections = await db.select().from(sectionsTable);
+  const settings = await db.select().from(globalSettingsTable);
+
+  // Fetch gallery data
+  const gallerySections = allSections.filter((section) => section.sectionName === 'gallery');
+  const galleryData: Record<string, { imageUrl: string }[]> = {};
+  for (const section of gallerySections) {
+    const images = await db
+      .select()
+      .from(galleryTable)
+      .where(eq(galleryTable.sectionId, section.id));
+    galleryData[section.id] = images; // Store images by section ID
+  }
+
+  // Fetch services data
+  const servicesSections = allSections.filter((section) => section.sectionName === 'services');
+  const servicesData: Record<string, { title: string; imageUrl: string | null }[]> = {};
+  for (const section of servicesSections) {
+    const services = await db
+      .select()
+      .from(servicesTable)
+      .where(eq(servicesTable.sectionId, section.id));
+    servicesData[section.id] = services; // Store services by section ID
+  }
+
+  // Try to fetch reviews, but don't fail if it doesn't work
+  let reviews: Review[] = [];
   try {
-
-    const message = url.searchParams.get('message') || null;
-
     const apiUrl =
       'https://www.carwise.com/auto-body-shops/shopPlugin?rfid=555006&re=1&type=f&theme=&size=m&zip=&demo=f&ap=false';
-    const { data } = await axios.get<string>(apiUrl); // Specify the type of response data
+
+    // Add browser-like headers to avoid 403 errors
+    const { data } = await axios.get<string>(apiUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Referer': 'https://www.carwise.com/',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1'
+      }
+    });
 
     const $ = cheerio.load(data);
-    let reviews: Review[] = []; // Initialize reviews with the defined type
 
     $('#reviewList li.reviewListItem').each((i, elem) => {
       const comment = $(elem).find('.comment').text().trim();
@@ -121,45 +160,19 @@ export async function load({ locals, url }): Promise<LoadResponse> {
         });
       }
     });
-
-    // Load user profile, sections and settings
-    const userProfile = await getOrCreateUserProfile(locals);
-    const allSections = await db.select().from(sectionsTable);
-    const settings = await db.select().from(globalSettingsTable)
-
-    // Fetch gallery data
-    const gallerySections = allSections.filter((section) => section.sectionName === 'gallery');
-    const galleryData: Record<string, { imageUrl: string }[]> = {};
-    for (const section of gallerySections) {
-      const images = await db
-        .select()
-        .from(galleryTable)
-        .where(eq(galleryTable.sectionId, section.id));
-      galleryData[section.id] = images; // Store images by section ID
-    }
-
-    // Fetch services data
-    const servicesSections = allSections.filter((section) => section.sectionName === 'services');
-    const servicesData: Record<string, { title: string; imageUrl: string | null }[]> = {};
-    for (const section of servicesSections) {
-      const services = await db
-        .select()
-        .from(servicesTable)
-        .where(eq(servicesTable.sectionId, section.id));
-      servicesData[section.id] = services; // Store services by section ID
-    }
-
-    return {
-      reviews,
-      userProfile,
-      allSections,
-      galleryData,
-      servicesData,
-      settings: settings[0],
-      message
-    };
   } catch (error) {
-    console.error('Error occurred:', error);
-    return { error: 'Failed to load data' };
+    // Log the error but don't fail the entire page load
+    console.error('Error fetching reviews from carwise.com:', error);
+    // reviews will remain an empty array
   }
+
+  return {
+    reviews,
+    userProfile,
+    allSections,
+    galleryData,
+    servicesData,
+    settings: settings[0],
+    message
+  };
 }
