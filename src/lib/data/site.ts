@@ -150,8 +150,54 @@ export const servicesData: Record<string, { title: string; imageUrl: string | nu
 	]
 };
 
-/** Carwise scrape was empty/403 at export time; section still renders with Carwise link. */
-export const reviews: SiteReview[] = [];
+/** Latest Carwise plugin reviews (shop reports ~997; plugin lists these). Synced 2026-10-27. */
+export const reviews: SiteReview[] = [
+	{
+		comment: "Great service, super friendly, I would definitely refer them",
+		customerName: "Kathleen",
+		carMake: "Mazda"
+	},
+	{
+		comment: "Thanks so much for your hard work! My car looks great.",
+		customerName: "Theodore",
+		carMake: "Chevrolet"
+	},
+	{
+		comment: "I would highly recommend McClinton , it was my first experience with them, and they were so friendly and easy to work with . \nJosh was great . \nHopefully won't need to see them anytime soon, 😄\nBut if I do , that's where I will go \nThank you",
+		customerName: "Susan",
+		carMake: "Volvo"
+	},
+	{
+		comment: "Absolutely 10/10 experience. Very straightforward, professional and easy process.",
+		customerName: "Sheila",
+		carMake: "Kia"
+	},
+	{
+		comment: "You guys did an amazing job! The finish on my hood feels like polished glass. You guys are definitely the shop I will be recommending to my friends and family!",
+		customerName: "Garrett",
+		carMake: "Dodge"
+	},
+	{
+		comment: "The Crew did a wonderful job fixing my rear bumper after getting rear ended. I got the car back 3 days earlier than expected. Everything looks brand new! They all rock 🤘🏼",
+		customerName: "Daniel",
+		carMake: "Chevrolet"
+	},
+	{
+		comment: "They were very thorough and kept me informed of the progress. They completed the repairs a week ahead of schedule.",
+		customerName: "Lisa",
+		carMake: "Chevrolet"
+	},
+	{
+		comment: "I never dealt with auto damage before so not knowing what to expect it was a comfort to have Josh talk me through the ordeal.  Was such a good experience and felt the work would be excellent and am very happy.  \nAaron was great in shuttling us back home & again in delivering auto to us.  My husband is really happy too.\nThank...",
+		customerName: "Verna",
+		carMake: "Kia"
+	},
+	{
+		comment: "Thank you - great job.",
+		customerName: "Kevin",
+		carMake: "Toyota"
+	},
+];
 
 export const siteContent = {
 	allSections,
