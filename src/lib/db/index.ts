@@ -1,7 +1,5 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from 'postgres';
-import * as schema from './schema'
-import {DATABASE_URL} from '$env/static/private'
-
-const client = postgres(DATABASE_URL)
-export const db = drizzle(client, {schema})
+/**
+ * DB client retired for the public static site.
+ * Content lives in $lib/data/site.ts. Kept as a stub so leftover imports fail loudly.
+ */
+export const db = null as never;

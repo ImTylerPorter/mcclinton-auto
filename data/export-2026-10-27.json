@@ -1,0 +1,147 @@
+{
+  "exported_at": "2026-10-27T22:29:37.355286+00:00",
+  "source_project": "ceugkpdqcpqktznfxykd",
+  "note": "Content tables only. Images remapped from Supabase Storage public URLs to /images/* local static files already in repo.",
+  "profile": [
+    {
+      "id": "78a09e0d-2abd-4746-aa73-6f84405fdaef",
+      "first_name": "",
+      "last_name": "",
+      "email": "hello@tylerporter.dev"
+    }
+  ],
+  "global_settings": [
+    {
+      "id": "2b9f0df6-8333-485b-8c70-6dac30d9768c",
+      "phone_number": "541\u2022967\u20229528",
+      "email": "info@mcclintonauto.com",
+      "address": "3960 E Commercial Way SE Albany, OR 97322",
+      "facebook_link": "https://www.facebook.com/mcclintonautocollision",
+      "instagram_link": "https://www.instagram.com/mcclintonauto"
+    }
+  ],
+  "sections": [
+    {
+      "id": "e85fd60f-ac78-4f06-a7dd-5389c472b382",
+      "section_name": "about",
+      "title": "MCCLINTON AUTO COLLISION",
+      "sub_title": "ABOUT",
+      "content": "<p>McClinton Auto Collision was started by owner Mark McClinton in 1997 when he decided it was time to provide Albany with quality repairs and quick turnaround. Mark has been in the business for over 40 years. Today Mark's son Aaron is in control of operations and has continued to grow the company to be competitive and relevant in todays market. With new flare mixed with significant experience McClinton Auto Collision is sure to be your best bet for vehicle repair and restoration. Call us today!</p>",
+      "tagline": null,
+      "button_text": null,
+      "button_link": null,
+      "image": "https://ceugkpdqcpqktznfxykd.supabase.co/storage/v1/object/public/website-images/1733435222244-us.jpg",
+      "extra_data": null
+    },
+    {
+      "id": "5ac6e72b-c64d-46a2-bd4b-efc7f02e8406",
+      "section_name": "contact",
+      "title": "Contact Us",
+      "sub_title": null,
+      "content": "<p>Send us a message. We will get back to you as soon as possible!</p>",
+      "tagline": null,
+      "button_text": null,
+      "button_link": null,
+      "image": null,
+      "extra_data": null
+    },
+    {
+      "id": "71ca4a5d-a550-46f0-9c46-9d9834ea4c55",
+      "section_name": "gallery",
+      "title": "Our Gallery",
+      "sub_title": null,
+      "content": "",
+      "tagline": null,
+      "button_text": null,
+      "button_link": null,
+      "image": null,
+      "extra_data": null
+    },
+    {
+      "id": "a7c40300-6a44-41e3-be6f-642995558c68",
+      "section_name": "hero",
+      "title": "AUTO COLLISION SPECIALIST AT COMPETITIVE PRICING!",
+      "sub_title": null,
+      "content": "<p><strong><em>Providing the best possible service for your vehicle.</em></strong></p>",
+      "tagline": null,
+      "button_text": "Contact Us!",
+      "button_link": "#contact",
+      "image": "https://ceugkpdqcpqktznfxykd.supabase.co/storage/v1/object/public/website-images/1733435065686-hero-bg.jpg",
+      "extra_data": null
+    },
+    {
+      "id": "031201d7-761a-46e0-8e7f-5dea9e821ba1",
+      "section_name": "outro",
+      "title": "Years in Business",
+      "sub_title": null,
+      "content": "<p>We are your local, family owned collision repair facility. We offer complete, high-quality repairs on all 2009 and newer vehicles, for all insurance companies and those paying out of pocket! We offer the latest auto body technology. You always have a choice when choosing your repair shop! Call us today for more information about having your damaged vehicle repaired.</p>",
+      "tagline": null,
+      "button_text": "Contact Us: 541\u2022967\u20229528",
+      "button_link": "tel:5419679528",
+      "image": null,
+      "extra_data": null
+    },
+    {
+      "id": "4bd8e138-14ec-4316-a23c-6f403beb2b2f",
+      "section_name": "services",
+      "title": "MCCLINTON AUTO COLLISION",
+      "sub_title": "WELCOME TO",
+      "content": "<p>McClinton Auto Collision is your late model, collision repair specialist. We repair all makes and models for all insurance companies and those paying out of pocket! If you've been in an auto accident, call us today!</p>",
+      "tagline": "Auto & Body Repair Specialist",
+      "button_text": "Contact Us",
+      "button_link": "#contact",
+      "image": "https://ceugkpdqcpqktznfxykd.supabase.co/storage/v1/object/public/website-images/1733435172917-building.jpg",
+      "extra_data": null
+    },
+    {
+      "id": "af5f5c34-1057-40e6-bebd-09ca9df5e005",
+      "section_name": "testimonials",
+      "title": "Client Reviews",
+      "sub_title": null,
+      "content": "",
+      "tagline": null,
+      "button_text": null,
+      "button_link": null,
+      "image": "https://ceugkpdqcpqktznfxykd.supabase.co/storage/v1/object/public/website-images/1733435255356-reviews.jpg",
+      "extra_data": null
+    }
+  ],
+  "gallery": [
+    {
+      "id": "1117c237-400b-402f-8913-97755223fa45",
+      "section_id": "71ca4a5d-a550-46f0-9c46-9d9834ea4c55",
+      "image_url": "https://ceugkpdqcpqktznfxykd.supabase.co/storage/v1/object/public/website-images/1733435323406-two.jpg"
+    },
+    {
+      "id": "3e79a020-f09b-47ed-83ea-99b3887bd2f5",
+      "section_id": "71ca4a5d-a550-46f0-9c46-9d9834ea4c55",
+      "image_url": "https://ceugkpdqcpqktznfxykd.supabase.co/storage/v1/object/public/website-images/1733435324442-three.jpg"
+    },
+    {
+      "id": "6475bec4-53f8-445d-b5e2-ae952e710d20",
+      "section_id": "71ca4a5d-a550-46f0-9c46-9d9834ea4c55",
+      "image_url": "https://ceugkpdqcpqktznfxykd.supabase.co/storage/v1/object/public/website-images/1733435325498-one.jpg"
+    }
+  ],
+  "services": [
+    {
+      "id": "13b1973b-49c7-4421-a7b6-9e70e8e2df79",
+      "section_id": "4bd8e138-14ec-4316-a23c-6f403beb2b2f",
+      "title": "Auto Body Painting",
+      "image_url": "https://ceugkpdqcpqktznfxykd.supabase.co/storage/v1/object/public/website-images/1733435173891-paint.jpg"
+    },
+    {
+      "id": "6752a5a1-6d24-4823-a426-8c1441b22e50",
+      "section_id": "4bd8e138-14ec-4316-a23c-6f403beb2b2f",
+      "title": "Dent Repair",
+      "image_url": "https://ceugkpdqcpqktznfxykd.supabase.co/storage/v1/object/public/website-images/1733435174871-dent.jpg"
+    },
+    {
+      "id": "6cd59bb1-a5ab-4fe6-a961-c189653d6d42",
+      "section_id": "4bd8e138-14ec-4316-a23c-6f403beb2b2f",
+      "title": "Collision Repair",
+      "image_url": "https://ceugkpdqcpqktznfxykd.supabase.co/storage/v1/object/public/website-images/1733435175941-paint.jpg"
+    }
+  ],
+  "reviews": []
+}

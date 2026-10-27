@@ -56,7 +56,7 @@
 
 <style>
 	footer {
-		min-height: 650px;
+		min-height: 740px;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		position: relative;
